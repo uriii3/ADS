@@ -69,7 +69,7 @@ def Ethical_Environment_Designer(env, l_ordering, epsilon, discount_factor=1.0, 
         hull = partial_convex_hull_value_iteration(env, discount_factor, max_iterations)
 
     print("-----")
-    print("Partial Convex hull of the initial state s_0:")
+    print("Partial Convex hull of the initial state s_0:") # això és un comentari per veure canvis al git
     hull_s0 = hull[initial_states[0][0]][initial_states[0][1]][initial_states[0][2]]
     print(hull_s0)
     print("-----")
