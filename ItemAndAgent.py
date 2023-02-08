@@ -1,6 +1,7 @@
 import numpy as np
 from ValuesNorms import ProblemName
 
+# un altre intent de veure si els canvis del github i tal i qual funcionen correctament!
 def compare_positions(pos1, pos2):
     if pos1[0] == pos2[0] and pos1[1] == pos2[1]:
         return True
