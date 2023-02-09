@@ -14,7 +14,7 @@ def ethical_embedding_state(hull_state, l_ordering, individual_weight=0, epsilon
 
     best_ethical_index = lex_max(hull_state, l_ordering, iWantIndex=True)
 
-    #print("Ethical policy : ", hull_state[best_ethical_index])
+    print("Ethical policy : ", hull_state[best_ethical_index])
 
     w = minimal_weight_computation(hull_state, best_ethical_index, individual_weight, epsilon)
 
@@ -61,10 +61,9 @@ def Ethical_Environment_Designer(env, l_ordering, epsilon, discount_factor=1.0, 
     :return: the ethical weight that solves the ethical embedding problem
     """
 
-    initial_states = [[43, 45, 31], [43, 45, 31]]
+    initial_states = [[43, 45, 31]]
     try:
-        dwaea
-    #    hull = np.load("v_function.npy", allow_pickle=True)
+       hull = np.load("v_function.npy", allow_pickle=True)
     except:
         hull = partial_convex_hull_value_iteration(env, discount_factor, max_iterations)
 
@@ -88,8 +87,8 @@ if __name__ == "__main__":
 
     from ADS_Environment import Environment
     env = Environment()
-    epsilon = 1.0
-    lex_ordering = [0, 1, 2] # order the correct values!!
+    epsilon = 0.01
+    lex_ordering = [1, 0, 2] # order the correct values!! [1,2,0]
     # Sembla que: 0: individual, 1: internal, 2: external!! no n'estic segur:(
     discount_factor = 1.0
     max_iterations = 5

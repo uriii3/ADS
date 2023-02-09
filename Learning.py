@@ -247,6 +247,8 @@ def example_execution(env, policy, render=False, stop=False):
     """
     max_timesteps = 200
 
+    n_incidents = 0
+    n_peatons_atacs = 0
     for i in range(10):
         timesteps = 0
         env.hard_reset()
@@ -256,7 +258,7 @@ def example_execution(env, policy, render=False, stop=False):
         print("State :", state)
         done = False
 
-        env.set_stats(i + 1, 99, 99, 99, 99)
+        #env.set_stats(i + 1, 99, 99, 99, 99)
         if render:
             if not env.drawing_paused():
                 time.sleep(0.5)
@@ -310,6 +312,7 @@ if __name__ == "__main__":
 
     policy, v, q = q_learning(env, weights, max_weights=max_weights)
 
+    np.save("policy_lex924.npy", policy)
     print("-------------------")
     print("The Learnt Policy has the following Value:")
     policy_value = v[43, 45, 31]
