@@ -308,11 +308,12 @@ if __name__ == "__main__":
     print("-------------------")
     print("Learning Process started. Will finish when Episode = ", max_weights)
 
-    weights = [1.0, 1.0, 1.0]
+    weights = [1.0, 0.354, 0.154] #change
 
     policy, v, q = q_learning(env, weights, max_weights=max_weights)
 
-    np.save("policy_lex924.npy", policy)
+    np.save("./Policies/policy_lex210.npy", policy) #change
+
     print("-------------------")
     print("The Learnt Policy has the following Value:")
     policy_value = v[43, 45, 31]
