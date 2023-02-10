@@ -6,6 +6,17 @@ def minimal_weight_computation(hull, chosen_index, individual_weight=0, epsilon=
     return minimal_weight_computation_all_states(hull, [chosen_index], None, individual_weight, epsilon)
 
 
+def get_positive_hull(hull):
+
+    positive_hull = list()
+    for i in range(len(hull)):
+        weights = minimal_weight_computation_all_states(hull, [i], None, individual_weight=-1)
+        if weights[0] is not None:
+            positive_hull.append(hull[i])
+
+    return positive_hull
+
+
 def minimal_weight_computation_all_states(hull, chosen_indexes, chosen_states=None, individual_weight=0, epsilon=0.001):
 
     chosen_hulls = list()
@@ -23,7 +34,7 @@ def minimal_weight_computation_all_states(hull, chosen_indexes, chosen_states=No
         J = [0]
 
     m = Model("knapsack")
-    w = [m.add_var() for _ in I]
+    w = [m.add_var(var_type="C") for _ in I]
 
     m.objective = maximize(xsum(xsum(-chosen_hulls[j][chosen_indexes[j]][i] * w[i] for i in I) for j in J))
 
@@ -40,7 +51,13 @@ def minimal_weight_computation_all_states(hull, chosen_indexes, chosen_states=No
             if j != chosen_indexes[k]:
                 m += xsum(w[i] * hull_state[j][i] for i in I) + epsilon <= xsum(w[i] * chosen_point[i] for i in I)
 
-    m += w[individual_weight] == 1
+    if individual_weight > -1:
+        m += w[individual_weight] == 1
+
+    for i in I:
+        m += w[i] >= min(0.001, epsilon)
+
+    m.verbose = 0
     m.optimize()
 
     #selected = [i for i in I]
@@ -57,16 +74,23 @@ if __name__ == "__main__":
     r_3 = [3, 4, 3, 8]
     r_4 = [3, 5, 4, 1]
     r_5 = [5, 1, 5, 6]
-    r_6 = [2, 4, 3, 8]
+    r_6 = [-1, 0, 0, 0]
 
     lex_index = 2
     ch = [r_1, r_2, r_3, r_4, r_5, r_6]
+
+    import numpy as np
+    #ch = np.load("v_function.npy", allow_pickle=True)[43][45][31]
+
+    print(ch)
+    print("--")
+    print(ch[lex_index])
+
+    print(get_positive_hull(ch))
+
     weights = minimal_weight_computation(ch, lex_index)
     print("---")
     print(weights)
-    weights[1] = 1.34
-    weights[2] = 0.00
-    weights[3] = 0.20
 
     def dot_product(w, v):
         z = 0
