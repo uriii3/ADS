@@ -12,7 +12,7 @@ def example_execution(env, policy, render=False, stop=False):
     :return:
     """
     max_timesteps = 200
-    number_of_simulations = 50
+    number_of_simulations = 200
 
     n_steps = 0
     n_peatons_run = 0
@@ -47,8 +47,8 @@ def example_execution(env, policy, render=False, stop=False):
 
             #print(rewards)
 
-            if rewards[1] != 0.0: n_peatons_run += 1
-            if rewards[2] != 0.0: n_bumps_coll += 1
+            if rewards[2] != 0.0: n_peatons_run += 1
+            if rewards[1] != 0.0: n_bumps_coll += 1
 
             done = dones[0]  # R Agent does not interfere
 
@@ -62,8 +62,9 @@ def example_execution(env, policy, render=False, stop=False):
     print()
     print('The results of these ' + str(number_of_simulations) + ' simulations are:')
     print(str(n_steps/number_of_simulations) + ' has been the average steps for the car to reach it\'s destination')
-    print(str(n_peatons_run/number_of_simulations) + ' has been the average peatons runned over by the car while reaching it\'s destination')
     print(str(n_bumps_coll/number_of_simulations) + ' has been the average incidents with bumps while reaching it\'s destination')
+    print(str(n_peatons_run/number_of_simulations) + ' has been the average peatons runned over by the car while reaching it\'s destination')
+
 
 class QLearner:
     """
@@ -79,7 +80,7 @@ class QLearner:
 
 if __name__ == "__main__":
 
-    policy = np.load('./Policies/policy_lex210.npy')
+    policy = np.load('./Policies/policy_lex201.npy')
 
     env = Environment(is_deterministic=True)
     print()
