@@ -1,10 +1,10 @@
 import numpy as np
 from ADS_Environment import Environment
 import threading
+import time
 
 def example_execution(env, policy, render=False, stop=False):
     """
-
     Simulation of the environment without learning.
 
     :param env: the environment encoding the (MO)MDP
@@ -27,7 +27,7 @@ def example_execution(env, policy, render=False, stop=False):
 
         #print("State :", state)
 
-        #env.set_stats(i + 1, 99, 99, 99, 99)
+        env.set_stats(i + 1, 99, 99, 99, 99)
         if render: # if we want to draw the simulations
             if not env.drawing_paused():
                 time.sleep(0.5)
@@ -87,4 +87,4 @@ if __name__ == "__main__":
     print("-----------------------------------")
     print("Starting simulations!")
     print("-----------------------------------")
-    QLearner(env, policy, drawing=False)
+    QLearner(env, policy, drawing=True)
