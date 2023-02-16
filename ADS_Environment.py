@@ -407,13 +407,14 @@ class Environment:
 
                 move_requests.append(move_request)
 
-        if len(move_requests) >= 2:
+        if len(move_requests) > 2:
             for i in range(1, len(move_requests)):
                 # If both agents want to go to the same place
                 if move_requests[0].get_destination() == move_requests[i].get_destination():
                     external_damage = True
-                # If the car goes to where the person was
+                # If the car goes to where the person was -> why is this a problem??
                 elif move_requests[0].get_destination() == move_requests[i].get_origin():
+                    print("es aqui")
                     external_damage = True
 
                 if move_requests[0].fast:

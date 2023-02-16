@@ -47,7 +47,9 @@ def example_execution(env, policy, render=False, stop=False):
 
             #print(rewards)
 
-            if rewards[2] != 0.0: n_peatons_run += 1
+            if rewards[2] != 0.0:
+                n_peatons_run += 1
+                print("ara!")
             if rewards[1] != 0.0: n_bumps_coll += 1
 
             done = dones[0]  # R Agent does not interfere

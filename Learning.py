@@ -358,7 +358,7 @@ if __name__ == "__main__":
 
     policy, v, q = q_learning(env, weights, max_weights=max_weights)
 
-    np.save("./Policies/policy_lex102.npy", policy) #changepo
+    #np.save("./Policies/policy_lex102.npy", policy) #changepo
 
     print("-------------------")
     print("The Learnt Policy has the following Value:")
