@@ -2,6 +2,7 @@ import numpy as np
 from ADS_Environment import Environment
 import threading
 import time
+import matplotlib.pyplot as plt
 
 
 RIGHT = 0
@@ -118,7 +119,7 @@ def deterministic_optimal_policy_calculator(Q, env, weights):
     return policy, V
 
 
-def choose_action(state, eps, q_table, weights, infoQ):
+def choose_action(state, eps, q_table, weights):
     """
 
     :param state: the current state in the environment
@@ -126,8 +127,6 @@ def choose_action(state, eps, q_table, weights, infoQ):
     :param q_table:  q_table or q_function the algorithm is following
     :return:  the most optimal action for the current state or a random action
     """
-
-    eps = max(0.05, eps - (0.001 * infoQ[state[0], state[1], state[2]])) # outside this specific loop, as Manels??
 
     NB_ACTIONS = 6
 
@@ -168,13 +167,22 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
     V = np.zeros([n_cells, n_cells, n_cells, n_objectives])
     Q = np.zeros([n_cells, n_cells, n_cells, n_actions, n_objectives])
 
-    max_episodes = 15000
+    max_episodes = 35000
     max_steps = 25
 
     epsilon = 0.99
     #eps_reduc = epsilon / max_episodes  # per trobar les accions (exploration vs exploitation)
     infoQ = np.zeros([n_cells, n_cells, n_cells])
     #alpha_reduc = 0.5 * alpha / max_episodes  # pel pas de cada correcció
+    valpha = []
+    vepsilon = []
+    verror0 = []
+    verror1 = []
+    verror2 = []
+
+    current_alpha = 0.2
+    current_eps = 0.3
+    reward = [0,0,0]
 
     for episode in range(1, max_episodes + 1):
         done = False
@@ -188,26 +196,42 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
             # print(Q[43, 45, 31])
             print(Q[43, 45, 31])
             print(infoQ[43, 45, 31])
+            valpha.append(current_alpha)
+            vepsilon.append(current_eps)
+            verror0.append(Q[43,45,31][0][0])
+            verror1.append(Q[43, 45, 31][0][1])
+            verror2.append(Q[43, 45, 31][0][2])
+
 
         step_count = 0
 
         #alpha -= alpha_reduc  # per intentar aproximar-nos el màxim de ràpid i més fiablement a la funció òptima
+
+
 
         while not done and step_count < max_steps:
             step_count += 1
             actions = list()
             infoQ[state[0], state[1], state[2]] += 1.0
 
-            actions.append(choose_action(state, epsilon, Q, weights, infoQ))
+            current_eps = max(0.1, epsilon - (0.001 * infoQ[state[0], state[1], state[2]]))
 
-            current_max = 0.05
+            actions.append(choose_action(state, current_eps, Q, weights))
+
+            current_max = 0.1
 
             if episode > 10000:
-                current_max = 0.03
+                current_max = 0.05
             elif episode > 15000:
-                current_max = 0.015
+                current_max = 0.01
+            elif episode > 20000:
+                current_max = 0.005
 
             current_alpha = max(current_max, alpha - (0.001 * infoQ[state[0]][state[1]][state[2]]))
+
+
+            if episode > 15000 and episode%30==0:
+                print(current_alpha)
 
             new_state, reward, dones = env.step(actions)  # we take the actions
 
@@ -229,6 +253,28 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
 
     # Output a deterministic optimal policy
     policy, V = deterministic_optimal_policy_calculator(Q, env, weights)
+    #print("Vector d'alphes: ", valpha)
+    #print("Vector d'epsilons: ", vepsilon)
+    plt.figure(1)
+    plt.subplot(2, 1, 1)
+    plt.plot(np.arange(len(valpha)), valpha, label="Alpha")
+    plt.legend()
+    plt.subplot(2, 1, 2)
+    plt.plot(np.arange(len(vepsilon)), vepsilon, label="Espilon")
+    plt.legend()
+
+    plt.figure(2)
+    plt.subplot(3, 1, 1)
+    plt.plot(np.arange(len(verror0)), verror0, label="0")
+    plt.legend()
+    plt.subplot(3, 1, 2)
+    plt.plot(np.arange(len(verror1)), verror1, label="1")
+    plt.legend()
+    plt.subplot(3, 1, 3)
+    plt.plot(np.arange(len(verror2)), verror2, label="2")
+    plt.legend()
+    plt.show()
+
 
     # np_graphics = np.array(for_graphics)
     # np.save('example.npy', np_graphics)
@@ -308,7 +354,7 @@ if __name__ == "__main__":
     print("-------------------")
     print("Learning Process started. Will finish when Episode = ", max_weights)
 
-    weights = [1.0, 0.271, 0.047] #change
+    weights = [1.0, 0.31, 0.02] #change
 
     policy, v, q = q_learning(env, weights, max_weights=max_weights)
 
@@ -319,5 +365,5 @@ if __name__ == "__main__":
     policy_value = v[43, 45, 31]
     print(policy_value)
 
-    env = Environment(is_deterministic=True)
-    QLearner(env, policy, drawing=True)
+    #env = Environment(is_deterministic=True)
+    #QLearner(env, policy, drawing=True)

@@ -161,13 +161,13 @@ class Environment:
                         #print("Eliminated because it is terminal :", [i, j])
 
 
-        print(self.states_agent_left)
-        print([self.translate_state_cell(i) for i in self.states_agent_left])
+        #print(self.states_agent_left)
+        #print([self.translate_state_cell(i) for i in self.states_agent_left])
 
-        print("------------------------------------------")
+        #print("------------------------------------------")
 
-        print(self.states_agent_right)
-        print([self.translate_state_cell(i) for i in self.states_agent_right])
+        #print(self.states_agent_right)
+        #print([self.translate_state_cell(i) for i in self.states_agent_right])
 
     def generate_item(self, kind, name, position, goal=None):
         """

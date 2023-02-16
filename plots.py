@@ -95,7 +95,7 @@ if __name__ == "__main__":
 
     policies_to_compare = [
         "012",
-        "021",
+        "102",
         "210"
     ]
 

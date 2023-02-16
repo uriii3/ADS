@@ -87,8 +87,8 @@ if __name__ == "__main__":
 
     from ADS_Environment import Environment
     env = Environment()
-    epsilon = 0.001
-    lex_ordering = [0, 1, 2] # order the correct values!! [1,2,0]
+    epsilon = 0.1
+    lex_ordering = [1, 0, 2] # order the correct values!! [1,2,0]
     # Sembla que: 0: individual, 1: internal, 2: external!! no n'estic segur:(
     discount_factor = 1.0
     max_iterations = 5
