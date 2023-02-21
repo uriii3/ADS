@@ -167,7 +167,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
     V = np.zeros([n_cells, n_cells, n_cells, n_objectives])
     Q = np.zeros([n_cells, n_cells, n_cells, n_actions, n_objectives])
 
-    max_episodes = 35000
+    max_episodes = 40000
     max_steps = 25
 
     epsilon = 0.99
@@ -226,8 +226,10 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
                 current_max = 0.01
             elif episode > 20000:
                 current_max = 0.005
+            elif episode > 30000:
+                current_max= 0.001
 
-            current_alpha = max(current_max, alpha - (0.001 * infoQ[state[0]][state[1]][state[2]]))
+            current_alpha = max(current_max, alpha - (0.0001 * infoQ[state[0]][state[1]][state[2]]))
 
 
             if episode > 15000 and episode%30==0:
@@ -354,11 +356,11 @@ if __name__ == "__main__":
     print("-------------------")
     print("Learning Process started. Will finish when Episode = ", max_weights)
 
-    weights = [1.0, 0.31, 0.02] #change
+    weights = [1.0, 0.029, 0.086] #change
 
     policy, v, q = q_learning(env, weights, max_weights=max_weights)
 
-    #np.save("./Policies/policy_lex102.npy", policy) #changepo
+    #np.save("./Policies/policy_lex021.npy", policy) #changepo
 
     print("-------------------")
     print("The Learnt Policy has the following Value:")

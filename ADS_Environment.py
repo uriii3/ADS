@@ -414,7 +414,6 @@ class Environment:
                     external_damage = True
                 # If the car goes to where the person was -> why is this a problem??
                 elif move_requests[0].get_destination() == move_requests[i].get_origin():
-                    print("es aqui")
                     external_damage = True
 
                 if move_requests[0].fast:

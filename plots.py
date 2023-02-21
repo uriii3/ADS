@@ -18,7 +18,7 @@ def plotting(environment, policies_to_compare):
         vpolicies.append(np.load('./Policies/policy_lex' + policies_to_compare[i] + '.npy'))
 
     max_timesteps = 200
-    number_of_simulations = 500
+    number_of_simulations = 50
     n_policies = len(vpolicies) # number of policies we will take intp account
 
     n_steps = np.zeros(n_policies, dtype=object)
@@ -67,20 +67,31 @@ def plotting(environment, policies_to_compare):
             v_bumps_coll[i][int_bumps_coll] += 1
             #print(n_steps)
 
+    space = 1.5
+    width = 1/(n_policies+space)
+    center = (n_policies-1)/2
+    CB_color_cycle = ['#377eb8', '#ff7f00', '#4daf4a', '#f781bf', '#a65628', '#984ea3', '#999999', '#e41a1c', '#dede00'] # in theory colorblind friendly :)
+    CB_hatch_cycle = ['/', 'o', 'x', '..', '*', '']
     plt.figure()
     for i in range(n_policies):
         plt.subplot(3, 1, 1)
-        plt.bar(np.arange(len(v_steps[0])), v_steps[i], label=policies_to_compare[i], alpha = 0.5)
+        plt.bar(np.arange(len(v_steps[0]))+width*(i-center), v_steps[i], label=policies_to_compare[i],
+                alpha = 0.5, width=width, color = CB_color_cycle[i], hatch=CB_hatch_cycle[i])
+        plt.xticks(np.arange(len(v_steps[0])), np.arange(len(v_steps[0])))
         plt.subplot(3, 1, 2)
-        plt.bar(np.arange(len(v_peatons_run[0])), v_peatons_run[i], label=policies_to_compare[i], alpha = 0.5)
+        plt.bar(np.arange(len(v_peatons_run[0]))+width*(i-center), v_peatons_run[i], label=policies_to_compare[i],
+                alpha = 0.5, width=width, color = CB_color_cycle[i], hatch=CB_hatch_cycle[i])
+        plt.xticks(np.arange(len(v_peatons_run[0])), np.arange(len(v_peatons_run[0])))
         plt.subplot(3, 1, 3)
-        plt.bar(np.arange(len(v_bumps_coll[0])), v_bumps_coll[i], label=policies_to_compare[i], alpha = 0.5)
+        plt.bar(np.arange(len(v_bumps_coll[0]))+width*(i-center), v_bumps_coll[i], label=policies_to_compare[i],
+                alpha = 0.5, width=width, color = CB_color_cycle[i], hatch=CB_hatch_cycle[i])
+
     plt.subplot(3, 1, 1)
     plt.title("Steps to reach destination")
     plt.subplot(3, 1, 2)
-    plt.title("Runned peatons in one go")
+    plt.title("Runned peatons in one go", y=1.0, pad=-14)
     plt.subplot(3, 1, 3)
-    plt.title("Bumps taken in one go")
+    plt.title("Bumps taken in one go", y=1.0, pad=-14)
     plt.legend()
     plt.show()
 
@@ -94,9 +105,11 @@ def plotting(environment, policies_to_compare):
 if __name__ == "__main__":
 
     policies_to_compare = [
-        "012",
+        "210",
         "102",
-        "210"
+        "201",
+        "012",
+        "021"
     ]
 
     # Initialize the environment:
