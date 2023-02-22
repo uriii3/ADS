@@ -12,7 +12,7 @@ def example_execution(env, policy, render=False, stop=False):
     :return:
     """
     max_timesteps = 200
-    number_of_simulations = 200
+    number_of_simulations = 50
 
     n_steps = 0
     n_peatons_run = 0
@@ -82,7 +82,7 @@ class QLearner:
 
 if __name__ == "__main__":
 
-    policy = np.load('./Policies/policy_lex012.npy')
+    policy = np.load('./Policies/policy_lex102.npy')
 
     env = Environment(is_deterministic=True)
     print()

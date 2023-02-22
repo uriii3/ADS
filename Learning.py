@@ -180,7 +180,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
     verror1 = []
     verror2 = []
 
-    current_alpha = 0.2
+    current_alpha = 0.5
     current_eps = 0.3
     reward = [0,0,0]
 
@@ -198,9 +198,9 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
             print(infoQ[43, 45, 31])
             valpha.append(current_alpha)
             vepsilon.append(current_eps)
-            verror0.append(Q[43,45,31][0][0])
-            verror1.append(Q[43, 45, 31][0][1])
-            verror2.append(Q[43, 45, 31][0][2])
+            verror0.append(Q[43,45,31][4][0])
+            verror1.append(Q[43, 45, 31][4][1])
+            verror2.append(Q[43, 45, 31][4][2])
 
 
         step_count = 0
@@ -214,26 +214,22 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
             actions = list()
             infoQ[state[0], state[1], state[2]] += 1.0
 
-            current_eps = max(0.1, epsilon - (0.001 * infoQ[state[0], state[1], state[2]]))
+            current_eps = max(0.1, epsilon - (0.0001 * infoQ[state[0], state[1], state[2]]))
 
             actions.append(choose_action(state, current_eps, Q, weights))
 
             current_max = 0.1
 
             if episode > 10000:
-                current_max = 0.05
+                current_max = 0.2
             elif episode > 15000:
-                current_max = 0.01
+                current_max = 0.1
             elif episode > 20000:
-                current_max = 0.005
+                current_max = 0.05
             elif episode > 30000:
-                current_max= 0.001
+                current_max= 0.01
 
             current_alpha = max(current_max, alpha - (0.0001 * infoQ[state[0]][state[1]][state[2]]))
-
-
-            if episode > 15000 and episode%30==0:
-                print(current_alpha)
 
             new_state, reward, dones = env.step(actions)  # we take the actions
 
@@ -356,11 +352,11 @@ if __name__ == "__main__":
     print("-------------------")
     print("Learning Process started. Will finish when Episode = ", max_weights)
 
-    weights = [1.0, 0.029, 0.086] #change
+    weights = [1.0, 0.001014, 0.0514] #change
 
     policy, v, q = q_learning(env, weights, max_weights=max_weights)
 
-    #np.save("./Policies/policy_lex021.npy", policy) #changepo
+    np.save("./Policies/policy_lex021.npy", policy) #changepo
 
     print("-------------------")
     print("The Learnt Policy has the following Value:")

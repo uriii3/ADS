@@ -88,11 +88,18 @@ def plotting(environment, policies_to_compare):
 
     plt.subplot(3, 1, 1)
     plt.title("Steps to reach destination")
+    for xx in np.arange(len(v_steps[0])):
+        plt.axvline(x=xx+0.5, linestyle='--', alpha = 0.3, color='red', lw=0.5)
     plt.subplot(3, 1, 2)
     plt.title("Runned peatons in one go", y=1.0, pad=-14)
+    for xx in np.arange(len(v_peatons_run[0])):
+        plt.axvline(x=xx+0.5, linestyle='--', alpha = 0.3, color='red', lw=0.5)
+    plt.legend()
     plt.subplot(3, 1, 3)
     plt.title("Bumps taken in one go", y=1.0, pad=-14)
-    plt.legend()
+    for xx in np.arange(len(v_bumps_coll[0])):
+        plt.axvline(x=xx+0.5, linestyle='--', alpha = 0.3, color='red', lw=0.5)
+
     plt.show()
 
     print()
