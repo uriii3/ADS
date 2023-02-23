@@ -138,7 +138,7 @@ class Environment:
 
         self.agent_succeeds = False
         self.internal_damage = False
-        self.external_damage = True
+        self.external_damage = 0
 
         self.norm_activated = False
 
@@ -288,8 +288,6 @@ class Environment:
 
                     # Two agents collide or at least they think so
                     if moved.get_map()[destiny[0], destiny[1]].there_is_an_agent() or dest.there_is_an_agent():
-                        #TODO: Check if we can remove this part
-                        #self.external_damage = True
                         pass
                     # Agent damaged with garbage
                     elif not dest.is_free():
@@ -297,8 +295,6 @@ class Environment:
 
                     if fast:
                         if moved.get_map()[in_between[0], in_between[1]].there_is_an_agent() or mid.there_is_an_agent():
-                            # TODO: Check if we can remove this part
-                            #self.external_damage = True
                             pass
                         # Agent damaged with garbage
                         elif not mid.is_free():
@@ -393,7 +389,7 @@ class Environment:
         #np.random.shuffle(shuffled)
 
         move_requests = list()
-        external_damage = False
+        external_damage = 0
 
         for i in range(len(self.agents)):
             while len(actions) < len(self.agents):
@@ -409,20 +405,20 @@ class Environment:
 
         if len(move_requests) > 2:
             for i in range(1, len(move_requests)):
-                # If both agents want to go to the same place
+                # If both agents want to go to the same place (LETHAL)
                 if move_requests[0].get_destination() == move_requests[i].get_destination():
-                    external_damage = True
-                # If the car goes to where the person was -> why is this a problem??
+                    external_damage = Values.SAFETY_EXTERNAL_LETHAL_MULTIPLIER
+                # If the car goes to where the person was (INJURY NOT LETHAL)
                 elif move_requests[0].get_destination() == move_requests[i].get_origin():
-                    external_damage = True
+                    external_damage = Values.SAFETY_EXTERNAL_INJURY_MULTIPLIER
 
                 if move_requests[0].fast:
-                    # If the car traverses where the person goes
+                    # If the car traverses where the person goes (LETHAL)
                     if move_requests[0].get_in_between() == move_requests[i].get_destination():
-                        external_damage = True
-                    # If the car traverses where the person was
+                        external_damage = Values.SAFETY_EXTERNAL_LETHAL_MULTIPLIER
+                    # If the car traverses where the person was (INJURY NOT LETHAL)
                     elif move_requests[0].get_in_between() == move_requests[i].get_origin():
-                        external_damage = True
+                        external_damage = Values.SAFETY_EXTERNAL_INJURY_MULTIPLIER
 
         ##### Order checking finished here
 
@@ -466,9 +462,9 @@ class Environment:
             reward[1] += Values.SAFETY_INTERNAL*speed_multiplier  # penalising for getting hurt
 
         # Value External Safety
-        if self.external_damage:
-            self.external_damage = False
-            reward[2] += Values.SAFETY_EXTERNAL
+        if self.external_damage > 0:
+            self.external_damage = 0
+            reward[2] += self.external_damage*Values.SAFETY_EXTERNAL
 
         return np.array(reward)
 

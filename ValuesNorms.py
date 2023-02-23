@@ -8,6 +8,10 @@ class Values:
 
     SAFETY_INTERNAL = -10  # Second objective
     SAFETY_EXTERNAL = -10  # Third objective
+
+    SAFETY_EXTERNAL_INJURY_MULTIPLIER = 0.3
+    SAFETY_EXTERNAL_LETHAL_MULTIPLIER = 1.0
+
     TO_TRASHCAN = 1 #Throwing garbage to trashcan is praiseworthy
 
 
