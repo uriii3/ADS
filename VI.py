@@ -288,7 +288,7 @@ if __name__ == "__main__":
     print("The Ethical Weight of the Scalarisation Function is set to W_E = " + str(w_E) + ", found by our Algorithm.")
     print("-------------------")
     print("Learning Process started. Will finish when Delta < Theta.")
-    weights = [1.0, 0.09927, 0.001]
+    weights = [1.0, 0.09, 0.000001]
     #weights = [1.0, w_E, w_E]
 
     #generate_model(env)

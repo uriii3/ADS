@@ -55,7 +55,7 @@ def minimal_weight_computation_all_states(hull, chosen_indexes, chosen_states=No
         m += w[individual_weight] == 1
 
     for i in I:
-        m += w[i] >= min(0.001, epsilon)
+        m += w[i] >= 0.00000001 # canviar si és necessari
 
     m.verbose = 0
     m.optimize()

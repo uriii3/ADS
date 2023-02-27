@@ -436,7 +436,6 @@ class Environment:
         self.map[pos[0]][pos[1]].appendate(item)
 
 
-
     def to_reward(self, agent, action):
         """
         Translates the current applied action into its corresponding reward.
@@ -463,8 +462,9 @@ class Environment:
 
         # Value External Safety
         if self.external_damage > 0:
-            self.external_damage = 0
             reward[2] += self.external_damage*Values.SAFETY_EXTERNAL
+            self.external_damage = 0
+
 
         return np.array(reward)
 

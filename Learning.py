@@ -109,8 +109,8 @@ def deterministic_optimal_policy_calculator(Q, env, weights):
     V = np.zeros(Q.shape[:-2] + (Q.shape[4],)) # this should work in theory, all cells + objectives
 
     for cell_car in  range(env.map_num_cells): # es podria acotar nombre de cel·les al nombre de cel·les a les que poden accedir??
-        for cell_pedestrian_1 in  range(env.map_num_cells):
-            for cell_pedestrian_2 in  range(env.map_num_cells):
+        for cell_pedestrian_1 in range(env.map_num_cells):
+            for cell_pedestrian_2 in range(env.map_num_cells):
                 # One step lookahead to find the best action for this state
                 best_action = randomized_argmax(scalarised_Qs(env, Q[cell_car, cell_pedestrian_1, cell_pedestrian_2], weights))
                 policy[cell_car, cell_pedestrian_1, cell_pedestrian_2] =  best_action
@@ -352,11 +352,11 @@ if __name__ == "__main__":
     print("-------------------")
     print("Learning Process started. Will finish when Episode = ", max_weights)
 
-    weights = [1.0, 0.001014, 0.0514] #change
+    weights = [1.0, 0.001, 0.66] #change
 
     policy, v, q = q_learning(env, weights, max_weights=max_weights)
 
-    np.save("./Policies/policy_lex021.npy", policy) #changepo
+    np.save("./Policies/policy_lex201.npy", policy) #changepo
 
     print("-------------------")
     print("The Learnt Policy has the following Value:")
