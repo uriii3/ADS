@@ -145,7 +145,7 @@ def update_q_table(q_table, env, weights, alpha, gamma, action, state, new_state
                 q_table[state[0], state[1], state[2], action, objective])
 
 
-def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
+def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episodes = 20000):
     """
     Q-Learning Algorithm as defined in Sutton and Barto's 'Reinforcement Learning: An Introduction' Section 6.5,
     (1998).
@@ -158,6 +158,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
     :param weights: the weight vector of the known linear scalarisation function
     :param alpha: the learning rate of the algorithm, can be set at discretion
     :param gamma: discount factor of the (MO)MPD, can be set at discretion (notice that this will change the Q-values)
+    :param max_episodes: episodes taken into account in each q_learning
     :return: the learnt policy and its associated state-value (V) and state-action-value (Q) functions
     """
 
@@ -167,7 +168,6 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
     V = np.zeros([n_cells, n_cells, n_cells, n_objectives])
     Q = np.zeros([n_cells, n_cells, n_cells, n_actions, n_objectives])
 
-    max_episodes = 40000
     max_steps = 25
 
     epsilon = 0.99
@@ -180,7 +180,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
     verror1 = []
     verror2 = []
 
-    current_alpha = 0.5
+    #current_alpha = 0.5
     current_eps = 0.3
     reward = [0,0,0]
 
@@ -191,16 +191,16 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
 
         state = env.get_state()
 
-        if episode % 100 == 0:
-            print("Episode : ", episode)
-            # print(Q[43, 45, 31])
-            print(Q[43, 45, 31])
-            print(infoQ[43, 45, 31])
-            valpha.append(current_alpha)
-            vepsilon.append(current_eps)
-            verror0.append(Q[43,45,31][4][0])
-            verror1.append(Q[43, 45, 31][4][1])
-            verror2.append(Q[43, 45, 31][4][2])
+        #if episode % 100 == 0:
+            #print("Episode : ", episode)
+            #print(Q[43, 45, 31])
+            #print(Q[43, 45, 31])
+            #print(infoQ[43, 45, 31])
+            #valpha.append(current_alpha)
+            #vepsilon.append(current_eps)
+            #verror0.append(Q[43,45,31][4][0])
+            #verror1.append(Q[43, 45, 31][4][1])
+            #verror2.append(Q[43, 45, 31][4][2])
 
 
         step_count = 0
@@ -214,22 +214,22 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
             actions = list()
             infoQ[state[0], state[1], state[2]] += 1.0
 
-            current_eps = max(0.1, epsilon - (0.0001 * infoQ[state[0], state[1], state[2]]))
+            current_eps = max(0.1, epsilon - (0.001 * infoQ[state[0], state[1], state[2]]))
 
             actions.append(choose_action(state, current_eps, Q, weights))
 
             current_max = 0.1
 
-            if episode > 10000:
+            '''if episode > 10000:
                 current_max = 0.2
             elif episode > 15000:
                 current_max = 0.1
             elif episode > 20000:
                 current_max = 0.05
             elif episode > 30000:
-                current_max= 0.01
+                current_max= 0.01'''
 
-            current_alpha = max(current_max, alpha - (0.0001 * infoQ[state[0]][state[1]][state[2]]))
+            #current_alpha = max(current_max, alpha - (0.0001 * infoQ[state[0]][state[1]][state[2]]))
 
             new_state, reward, dones = env.step(actions)  # we take the actions
 
@@ -237,7 +237,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
             # R_big[1] += reward[1]*(gamma**(step_count-1))
 
             # we update the table
-            update_q_table(Q, env, weights, current_alpha, gamma, actions[0], state, new_state, reward)
+            update_q_table(Q, env, weights, alpha, gamma, actions[0], state, new_state, reward)
 
             state = new_state
             done = dones[0]
@@ -251,9 +251,9 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
 
     # Output a deterministic optimal policy
     policy, V = deterministic_optimal_policy_calculator(Q, env, weights)
-    #print("Vector d'alphes: ", valpha)
-    #print("Vector d'epsilons: ", vepsilon)
-    plt.figure(1)
+
+    # Plot the information gathered:
+    '''plt.figure(1)
     plt.subplot(2, 1, 1)
     plt.plot(np.arange(len(valpha)), valpha, label="Alpha")
     plt.legend()
@@ -271,7 +271,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000):
     plt.subplot(3, 1, 3)
     plt.plot(np.arange(len(verror2)), verror2, label="2")
     plt.legend()
-    plt.show()
+    plt.show()'''
 
 
     # np_graphics = np.array(for_graphics)
@@ -352,16 +352,47 @@ if __name__ == "__main__":
     print("-------------------")
     print("Learning Process started. Will finish when Episode = ", max_weights)
 
-    weights = [1.0, 0.001, 0.66] #change
+    vweights = [[1.0, 0.31, 0.013],
+                [1.0, 0.372, 1.5],
+                [1.0, 0.09, 0.000000001],
+                [1.0, 0.045, 0.233],
+                [1.0, 0.372, 1.5],
+                [1.0, 0.005, 0.633]]
 
-    policy, v, q = q_learning(env, weights, max_weights=max_weights)
+    vvalues = [[7.0, 0.0, -3.375],
+               [6.03125, 0.0, 0.0],
+               [10.0, -20.0, - 4.0],
+               [10.0, - 30.0, - 0.75],
+               [6.03125, 0.0, 0.0],
+               [9.625, - 30.0, 0.0]]
+    valpha = [[],[],[],[],[],[]]
 
-    np.save("./Policies/policy_lex201.npy", policy) #changepo
+    for i in range(0,6):
+        weights = vweights[i]
+        value = vvalues[i]
+        print("-----")
+        print()
+        print("-----")
+        print("Policy with the weights: ", weights)
+        print("Expected value is: ", value)
+        for alpha in np.arange(0.05, 0.7, 0.05):
+            policy, v, q = q_learning(env, weights, alpha=alpha, max_weights=max_weights, max_episodes=20000)
+            print("-------------------")
+            print("The Learnt Policy has the following Value for alpha = ", alpha, " is:")
+            print(v[43, 45, 31])
+            error = v[43, 45, 31] - value
+            if sum(abs(error)) < 0.001:
+                print("This alpha works!")
+                valpha[i].append(alpha)
+
+
+    #np.save("./Policies/policy_lex201.npy", policy) #changepo
 
     print("-------------------")
-    print("The Learnt Policy has the following Value:")
-    policy_value = v[43, 45, 31]
-    print(policy_value)
+    print("Finnished!!!")
+    print(valpha)
+    #policy_value = v[43, 45, 31]
+    #print(policy_value)
 
     #env = Environment(is_deterministic=True)
     #QLearner(env, policy, drawing=True)
