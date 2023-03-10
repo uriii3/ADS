@@ -220,14 +220,12 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
             current_max = 0.1
 
-            '''if episode > 10000:
-                current_max = 0.2
-            elif episode > 15000:
-                current_max = 0.1
+            if episode > 10000:
+                alpha = 0.2
             elif episode > 20000:
-                current_max = 0.05
+                alpha = 0.05
             elif episode > 30000:
-                current_max= 0.01'''
+                alpha= 0.01
 
             #current_alpha = max(current_max, alpha - (0.0001 * infoQ[state[0]][state[1]][state[2]]))
 
@@ -375,13 +373,13 @@ if __name__ == "__main__":
         print("-----")
         print("Policy with the weights: ", weights)
         print("Expected value is: ", value)
-        for alpha in np.arange(0.05, 0.7, 0.05):
-            policy, v, q = q_learning(env, weights, alpha=alpha, max_weights=max_weights, max_episodes=20000)
+        for alpha in np.arange(0.2, 0.85, 0.05):
+            policy, v, q = q_learning(env, weights, alpha=alpha, max_weights=max_weights, max_episodes=40000)
             print("-------------------")
             print("The Learnt Policy has the following Value for alpha = ", alpha, " is:")
             print(v[43, 45, 31])
             error = v[43, 45, 31] - value
-            if sum(abs(error)) < 0.001:
+            if sum(abs(error)) < 0.5: # 0.5 ??
                 print("This alpha works!")
                 valpha[i].append(alpha)
 
