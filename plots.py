@@ -2,6 +2,13 @@ import numpy as np
 from ADS_Environment import Environment
 import matplotlib.pyplot as plt
 
+def transcribe_label(numeros):
+    if numeros == "000" or numeros == "unethical":
+        return "Unethical"
+    first, second, third = [*numeros]
+    dictionary = {"0":"Velocity", "1": "Internal (bumps)", "2": "External (pedestrians)"}
+    dictionary2 = {"0":"Velocity", "1": "Internal", "2": "External"}
+    return numeros + ": " + dictionary2[first] + " > " + dictionary2[second] + " > " + dictionary2[third]
 
 def plotting(environment, policies_to_compare):
 
@@ -81,19 +88,19 @@ def plotting(environment, policies_to_compare):
     plt.figure()
     for i in range(n_policies):
         plt.subplot(4, 1, 1)
-        plt.bar(np.arange(len(v_steps[0]))+width*(i-center), v_steps[i], label=policies_to_compare[i],
+        plt.bar(np.arange(len(v_steps[0]))+width*(i-center), v_steps[i], label=transcribe_label(policies_to_compare[i]),
                 alpha = 0.5, width=width, color = CB_color_cycle[i], hatch=CB_hatch_cycle[i])
         plt.xticks(np.arange(len(v_steps[0])), np.arange(len(v_steps[0])))
         plt.subplot(4, 1, 2)
-        plt.bar(np.arange(len(v_peatons_run[0]))+width*(i-center), v_peatons_run[i], label=policies_to_compare[i],
+        plt.bar(np.arange(len(v_peatons_run[0]))+width*(i-center), v_peatons_run[i], label=transcribe_label(policies_to_compare[i]),
                 alpha = 0.5, width=width, color = CB_color_cycle[i], hatch=CB_hatch_cycle[i])
         plt.xticks(np.arange(len(v_peatons_run[0])), np.arange(len(v_peatons_run[0])))
         plt.subplot(4, 1, 3)
-        plt.bar(np.arange(len(v_dangerous_driving[0])) + width * (i - center), v_dangerous_driving[i], label=policies_to_compare[i],
+        plt.bar(np.arange(len(v_dangerous_driving[0])) + width * (i - center), v_dangerous_driving[i], label=transcribe_label(policies_to_compare[i]),
                 alpha=0.5, width=width, color=CB_color_cycle[i], hatch=CB_hatch_cycle[i])
         plt.xticks(np.arange(len(v_dangerous_driving[0])), np.arange(len(v_dangerous_driving[0])))
         plt.subplot(4, 1, 4)
-        plt.bar(np.arange(len(v_bumps_coll[0]))+width*(i-center), v_bumps_coll[i], label=policies_to_compare[i],
+        plt.bar(np.arange(len(v_bumps_coll[0]))+width*(i-center), v_bumps_coll[i], label=transcribe_label(policies_to_compare[i]),
                 alpha = 0.5, width=width, color = CB_color_cycle[i], hatch=CB_hatch_cycle[i])
 
     plt.subplot(4, 1, 1)
@@ -132,7 +139,8 @@ if __name__ == "__main__":
         "201",
         "012",
         "021",
-        "000"
+        "000",
+        "unethical"
     ]
 
     # Initialize the environment:
