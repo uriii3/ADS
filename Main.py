@@ -87,8 +87,8 @@ if __name__ == "__main__":
 
     from ADS_Environment import Environment
     env = Environment()
-    epsilon = 0.12
-    lex_ordering = [1,0,2] # order the correct values!! [1,2,0]
+    epsilon = 0.249
+    lex_ordering = [0,2,1] # order the correct values!! [1,2,0]
     # Sembla que: 0: individual, 1: internal, 2: external!!
     discount_factor = 1.0
     max_iterations = 5
@@ -96,3 +96,11 @@ if __name__ == "__main__":
     w_E = Ethical_Environment_Designer(env, lex_ordering, epsilon, discount_factor, max_iterations)
 
     print("Ethical weights found: ", w_E)
+    # 0.12: [1.0, 0.08799674999999998, 1e-05]
+    # 0.13: [1.0, 0.08699675000000001, 9.999999999999999e-06]
+    # 0.15: [1.0, 0.08499675000000001, 9.999999999999999e-06]
+    # 0.2: [1.0, 0.07999675000000002, 1.0000000000000003e-05]
+    # 0.22: [1.0, 0.07466666666666667, 0.01025641025641028]
+    # 0.23: [1.0, 0.07200000000000001, 0.0153846153846154]
+    # 0.24: [1.0, 0.06933333333333333, 0.020512820512820516]
+    # 0.249: [1.0, 0.06693333333333333, 0.008000000000000007]

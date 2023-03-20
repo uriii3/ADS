@@ -119,7 +119,7 @@ def deterministic_optimal_policy_calculator(Q, env, weights):
     return policy, V
 
 
-def choose_action(state, eps, q_table, weights):
+def choose_action(env, state, eps, q_table, weights):
     """
 
     :param state: the current state in the environment
@@ -191,9 +191,9 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
         state = env.get_state()
 
-        #if episode % 100 == 0:
-            #print("Episode : ", episode)
-            #print(Q[43, 45, 31])
+        if episode % 100 == 0:
+            print("Episode : ", episode)
+            print(Q[43, 45, 31])
             #print(Q[43, 45, 31])
             #print(infoQ[43, 45, 31])
             #valpha.append(current_alpha)
@@ -216,16 +216,16 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
             current_eps = max(0.1, epsilon - (0.001 * infoQ[state[0], state[1], state[2]]))
 
-            actions.append(choose_action(state, current_eps, Q, weights))
+            actions.append(choose_action(env, state, current_eps, Q, weights))
 
             current_max = 0.1
 
-            if episode > 10000:
+            if episode > 20000:
                 alpha = 0.2
-            elif episode > 20000:
-                alpha = 0.05
             elif episode > 30000:
-                alpha= 0.01
+                alpha = 0.1
+            elif episode > 40000:
+                alpha = 0.05
 
             #current_alpha = max(current_max, alpha - (0.0001 * infoQ[state[0]][state[1]][state[2]]))
 
@@ -348,49 +348,26 @@ if __name__ == "__main__":
     print("L(earning) Agent will learn now using Q-Learning in the Public Civility Game.")
     # print("The Ethical Weight of the Scalarisation Function is set to W_E = " + str(w_E) + ", found by our Algorithm.")
     print("-------------------")
-    print("Learning Process started. Will finish when Episode = ", max_weights)
 
-    vweights = [[1.0, 0.31, 0.013],
-                [1.0, 0.372, 1.5],
-                [1.0, 0.09, 0.000000001],
-                [1.0, 0.045, 0.233],
-                [1.0, 0.372, 1.5],
-                [1.0, 0.005, 0.633]]
+    # Parameters to change in each run
+    alpha = 0.8
+    weights = [1.0, 0.0, 0.0]
+    lexicographic_order = "000"
+    max_episodes = 50000
+    save = True
 
-    vvalues = [[7.0, 0.0, -3.375],
-               [6.03125, 0.0, 0.0],
-               [10.0, -20.0, - 4.0],
-               [10.0, - 30.0, - 0.75],
-               [6.03125, 0.0, 0.0],
-               [9.625, - 30.0, 0.0]]
-    valpha = [[],[],[],[],[],[]]
+    # Training.
+    policy, v, q = q_learning(env, weights, alpha=alpha, max_weights=max_weights, max_episodes=max_episodes)
+    print("-------------------")
+    print("The Learnt Policy has the following Value for alpha = ", alpha, " is:")
 
-    for i in range(0,6):
-        weights = vweights[i]
-        value = vvalues[i]
-        print("-----")
-        print()
-        print("-----")
-        print("Policy with the weights: ", weights)
-        print("Expected value is: ", value)
-        for alpha in np.arange(0.2, 0.85, 0.05):
-            policy, v, q = q_learning(env, weights, alpha=alpha, max_weights=max_weights, max_episodes=40000)
-            print("-------------------")
-            print("The Learnt Policy has the following Value for alpha = ", alpha, " is:")
-            print(v[43, 45, 31])
-            error = v[43, 45, 31] - value
-            if sum(abs(error)) < 0.5: # 0.5 ??
-                print("This alpha works!")
-                valpha[i].append(alpha)
-
-
-    #np.save("./Policies/policy_lex201.npy", policy) #changepo
+    if save:
+        np.save("./Policies/policy_lex" + lexicographic_order + ".npy", policy) #changepo
 
     print("-------------------")
     print("Finnished!!!")
-    print(valpha)
-    #policy_value = v[43, 45, 31]
-    #print(policy_value)
+    policy_value = v[43, 45, 31]
+    print(policy_value)
 
     #env = Environment(is_deterministic=True)
     #QLearner(env, policy, drawing=True)

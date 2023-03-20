@@ -23,9 +23,11 @@ def plotting(environment, policies_to_compare):
 
     n_steps = np.zeros(n_policies, dtype=object)
     n_peatons_run = np.zeros(n_policies, dtype=object)
+    n_dangerous_driving = np.zeros(n_policies, dtype=object)
     n_bumps_coll = np.zeros(n_policies, dtype=object)
     v_steps = np.zeros((n_policies, 14))
     v_peatons_run = np.zeros((n_policies, 4))
+    v_dangerous_driving = np.zeros((n_policies, 4))
     v_bumps_coll = np.zeros((n_policies, 5))
 
     for i in range(n_policies):
@@ -34,6 +36,7 @@ def plotting(environment, policies_to_compare):
             # Initialize environment
             timesteps = 0
             int_peatons_run = 0
+            int_dangerous_driving = 0
             int_bumps_coll = 0
             environment.hard_reset()
             state = environment.get_state()
@@ -52,18 +55,21 @@ def plotting(environment, policies_to_compare):
 
                 #print(rewards)
 
-                if rewards[2] != 0.0: int_peatons_run += 1
+                if rewards[2] == -10.0: int_peatons_run += 1
+                if rewards[2] == -3.0: int_dangerous_driving += 1
                 if rewards[1] != 0.0: int_bumps_coll += 1
 
                 done = dones[0]  # R Agent does not interfere
 
             n_steps[i] += timesteps
             n_peatons_run[i] += int_peatons_run
+            n_dangerous_driving[i] += int_dangerous_driving
             n_bumps_coll[i] += int_bumps_coll
 
             # Sumem 1 a cada simulació que correspon
             v_steps[i][timesteps] += 1
             v_peatons_run[i][int_peatons_run] += 1
+            v_dangerous_driving[i][int_dangerous_driving] += 1
             v_bumps_coll[i][int_bumps_coll] += 1
             #print(n_steps)
 
@@ -71,31 +77,39 @@ def plotting(environment, policies_to_compare):
     width = 1/(n_policies+space)
     center = (n_policies-1)/2
     CB_color_cycle = ['#377eb8', '#ff7f00', '#4daf4a', '#f781bf', '#a65628', '#984ea3', '#999999', '#e41a1c', '#dede00'] # in theory colorblind friendly :)
-    CB_hatch_cycle = ['/', 'o', 'x', '..', '*', '']
+    CB_hatch_cycle = ['/', 'o', 'x', '..', '*', '', '/', 'o', 'x']
     plt.figure()
     for i in range(n_policies):
-        plt.subplot(3, 1, 1)
+        plt.subplot(4, 1, 1)
         plt.bar(np.arange(len(v_steps[0]))+width*(i-center), v_steps[i], label=policies_to_compare[i],
                 alpha = 0.5, width=width, color = CB_color_cycle[i], hatch=CB_hatch_cycle[i])
         plt.xticks(np.arange(len(v_steps[0])), np.arange(len(v_steps[0])))
-        plt.subplot(3, 1, 2)
+        plt.subplot(4, 1, 2)
         plt.bar(np.arange(len(v_peatons_run[0]))+width*(i-center), v_peatons_run[i], label=policies_to_compare[i],
                 alpha = 0.5, width=width, color = CB_color_cycle[i], hatch=CB_hatch_cycle[i])
         plt.xticks(np.arange(len(v_peatons_run[0])), np.arange(len(v_peatons_run[0])))
-        plt.subplot(3, 1, 3)
+        plt.subplot(4, 1, 3)
+        plt.bar(np.arange(len(v_dangerous_driving[0])) + width * (i - center), v_dangerous_driving[i], label=policies_to_compare[i],
+                alpha=0.5, width=width, color=CB_color_cycle[i], hatch=CB_hatch_cycle[i])
+        plt.xticks(np.arange(len(v_dangerous_driving[0])), np.arange(len(v_dangerous_driving[0])))
+        plt.subplot(4, 1, 4)
         plt.bar(np.arange(len(v_bumps_coll[0]))+width*(i-center), v_bumps_coll[i], label=policies_to_compare[i],
                 alpha = 0.5, width=width, color = CB_color_cycle[i], hatch=CB_hatch_cycle[i])
 
-    plt.subplot(3, 1, 1)
+    plt.subplot(4, 1, 1)
     plt.title("Steps to reach destination")
     for xx in np.arange(len(v_steps[0])):
         plt.axvline(x=xx+0.5, linestyle='--', alpha = 0.3, color='red', lw=0.5)
-    plt.subplot(3, 1, 2)
+    plt.subplot(4, 1, 2)
     plt.title("Runned peatons in one go", y=1.0, pad=-14)
     for xx in np.arange(len(v_peatons_run[0])):
         plt.axvline(x=xx+0.5, linestyle='--', alpha = 0.3, color='red', lw=0.5)
-    plt.legend()
-    plt.subplot(3, 1, 3)
+    plt.subplot(4, 1, 3)
+    plt.title("Dangerous driving situations in one go", y=1.0, pad=-14)
+    plt.legend(loc='center right', bbox_to_anchor=(1.1, 1.0), fancybox=True, shadow=True)
+    for xx in np.arange(len(v_dangerous_driving[0])):
+        plt.axvline(x=xx + 0.5, linestyle='--', alpha=0.3, color='red', lw=0.5)
+    plt.subplot(4, 1, 4)
     plt.title("Bumps taken in one go", y=1.0, pad=-14)
     for xx in np.arange(len(v_bumps_coll[0])):
         plt.axvline(x=xx+0.5, linestyle='--', alpha = 0.3, color='red', lw=0.5)
@@ -113,10 +127,12 @@ if __name__ == "__main__":
 
     policies_to_compare = [
         "210",
+        "120",
         "102",
         "201",
         "012",
-        "021"
+        "021",
+        "000"
     ]
 
     # Initialize the environment:
