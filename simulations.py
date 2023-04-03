@@ -12,7 +12,7 @@ def example_execution(env, policy, render=False, stop=False):
     :return:
     """
     max_timesteps = 200
-    number_of_simulations = 10
+    number_of_simulations = 40
 
     n_steps = 0
     n_peatons_run = 0
@@ -50,6 +50,7 @@ def example_execution(env, policy, render=False, stop=False):
             if rewards[2] != 0.0:
                 n_peatons_run += 1
                 print("ara!")
+                print(rewards[2])
             if rewards[1] != 0.0: n_bumps_coll += 1
 
             done = dones[0]  # R Agent does not interfere
@@ -82,7 +83,7 @@ class QLearner:
 
 if __name__ == "__main__":
 
-    policy = np.load('./Policies/policy_lex120.npy')
+    policy = np.load('./Policies/policy_lex021.npy')
 
     env = Environment(is_deterministic=True)
     print()

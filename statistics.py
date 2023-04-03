@@ -52,7 +52,6 @@ def example_execution(env, policy, render=False, stop=False):
             # print("State :", state)
 
             # Now we are going to check how ethical are we behaving!!
-            k
 
             # print(rewards)
 

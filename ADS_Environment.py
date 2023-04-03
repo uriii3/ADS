@@ -74,7 +74,7 @@ class Environment:
 
     initial_agent_left_position = [6, 1] #-> 43
     initial_agent_right_position = [4, 3] #-> 31
-    initial_pedestrian_2_position = [6, 3] #-> 45
+    initial_pedestrian_2_position = [5, 3] #-> 38
 
     agent_left_goal = [1, 6]
     agent_right_goal = [2, 6]
@@ -145,6 +145,9 @@ class Environment:
         self.is_deterministic = True #is_deterministic
 
         self.window = Window(self.give_window_info())
+
+        self.n_fatalities = 0
+        self.n_injuries = 0
 
     def set_states_for_VI(self):
 
@@ -407,18 +410,22 @@ class Environment:
             for i in range(1, len(move_requests)):
                 # If both agents want to go to the same place (LETHAL)
                 if move_requests[0].get_destination() == move_requests[i].get_destination():
-                    external_damage = Values.SAFETY_EXTERNAL_LETHAL_MULTIPLIER
+                    external_damage += Values.SAFETY_EXTERNAL_LETHAL_MULTIPLIER
+                    self.n_fatalities += 1
                 # If the car goes to where the person was (INJURY NOT LETHAL)
                 elif move_requests[0].get_destination() == move_requests[i].get_origin():
-                    external_damage = Values.SAFETY_EXTERNAL_INJURY_MULTIPLIER
+                    external_damage += Values.SAFETY_EXTERNAL_INJURY_MULTIPLIER
+                    self.n_injuries += 1
 
                 if move_requests[0].fast:
                     # If the car traverses where the person goes (LETHAL)
                     if move_requests[0].get_in_between() == move_requests[i].get_destination():
-                        external_damage = Values.SAFETY_EXTERNAL_LETHAL_MULTIPLIER
+                        external_damage += Values.SAFETY_EXTERNAL_LETHAL_MULTIPLIER
+                        self.n_fatalities += 1
                     # If the car traverses where the person was (INJURY NOT LETHAL)
                     elif move_requests[0].get_in_between() == move_requests[i].get_origin():
-                        external_damage = Values.SAFETY_EXTERNAL_INJURY_MULTIPLIER
+                        external_damage += Values.SAFETY_EXTERNAL_INJURY_MULTIPLIER
+                        self.n_injuries += 1
 
         ##### Order checking finished here
 

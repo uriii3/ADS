@@ -116,7 +116,7 @@ if __name__ == "__main__":
     #print(v_func[43][31][31])
     print("--")
     #print(v_func[43][38][38])
-    print(v_func[43][45][31])
+    print(v_func[43][38][31])
 
 
 

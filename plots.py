@@ -2,6 +2,7 @@ import numpy as np
 from ADS_Environment import Environment
 import matplotlib.pyplot as plt
 
+
 def transcribe_label(numeros):
     if numeros == "000" or numeros == "unethical":
         return "Unethical"
@@ -9,6 +10,7 @@ def transcribe_label(numeros):
     dictionary = {"0":"Velocity", "1": "Internal (bumps)", "2": "External (pedestrians)"}
     dictionary2 = {"0":"Velocity", "1": "Internal", "2": "External"}
     return numeros + ": " + dictionary2[first] + " > " + dictionary2[second] + " > " + dictionary2[third]
+
 
 def plotting(environment, policies_to_compare):
 
@@ -19,20 +21,33 @@ def plotting(environment, policies_to_compare):
     :param vpolicies: a function S -> A assigning to each state the corresponding recommended action
     :return:
     """
-    vpolicies = []
-    # We save all policies we will compare inside the vector:
-    for i in range(0, len(policies_to_compare)):
-        vpolicies.append(np.load('./Policies/policy_lex' + policies_to_compare[i] + '.npy'))
-
+    #Variables to set:
     max_timesteps = 200
-    number_of_simulations = 50
-    n_policies = len(vpolicies) # number of policies we will take intp account
+    number_of_simulations = 250
+
+    # Variables taken into account quickly derived
+    n_policies = len(policies_to_compare) # number of policies we will take intp account
+    unethical = False
+    vpolicies = []
+    n_unethical_policies = 2
+
+    # We save all policies we will compare inside the vector:
+    if policies_to_compare[len(policies_to_compare)-1] == "unethical":
+        unethical = True
+        for i in range(0, len(policies_to_compare)-1):
+            vpolicies.append(np.load('./Policies/policy_lex' + policies_to_compare[i] + '.npy'))
+        for i in range(0,n_unethical_policies): # change in case more policies are added
+            vpolicies.append(np.load('./Policies/policy_lexunethical' + str(i) + '.npy'))
+
+    else:
+        for i in range(0, len(policies_to_compare)):
+            vpolicies.append(np.load('./Policies/policy_lex' + policies_to_compare[i] + '.npy'))
 
     n_steps = np.zeros(n_policies, dtype=object)
     n_peatons_run = np.zeros(n_policies, dtype=object)
     n_dangerous_driving = np.zeros(n_policies, dtype=object)
     n_bumps_coll = np.zeros(n_policies, dtype=object)
-    v_steps = np.zeros((n_policies, 14))
+    v_steps = np.zeros((n_policies, 20))
     v_peatons_run = np.zeros((n_policies, 4))
     v_dangerous_driving = np.zeros((n_policies, 4))
     v_bumps_coll = np.zeros((n_policies, 5))
@@ -40,6 +55,13 @@ def plotting(environment, policies_to_compare):
     for i in range(n_policies):
         policy = vpolicies[i]
         for j in range(number_of_simulations):
+            if unethical and i==n_policies-1: # we are on the unethical simulation
+                if j%(number_of_simulations/n_unethical_policies) == 0:
+                    print(j)
+                    print(number_of_simulations)
+                    print(n_unethical_policies)
+                    policy = vpolicies[i+int(j/(number_of_simulations/n_unethical_policies))]
+
             # Initialize environment
             timesteps = 0
             int_peatons_run = 0
@@ -128,6 +150,7 @@ def plotting(environment, policies_to_compare):
     print(str(n_steps/number_of_simulations) + ' has been the average steps for the car to reach it\'s destination')
     print(str(n_bumps_coll/number_of_simulations) + ' has been the average incidents with bumps while reaching it\'s destination')
     print(str(n_peatons_run/number_of_simulations) + ' has been the average peatons runned over by the car while reaching it\'s destination')
+    print(str(n_dangerous_driving/number_of_simulations) + ' has been the average dangerous driving situations while reaching it\'s destination')
 
 
 if __name__ == "__main__":
@@ -139,7 +162,6 @@ if __name__ == "__main__":
         "201",
         "012",
         "021",
-        "000",
         "unethical"
     ]
 

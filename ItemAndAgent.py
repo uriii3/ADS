@@ -2,11 +2,14 @@ import numpy as np
 from ValuesNorms import ProblemName
 
 # un altre intent de veure si els canvis del github i tal i qual funcionen correctament!
+
+
 def compare_positions(pos1, pos2):
     if pos1[0] == pos2[0] and pos1[1] == pos2[1]:
         return True
 
     return False
+
 
 class Move:
     def __init__(self, mover, moved, origin, destination):
@@ -133,7 +136,7 @@ class Agent(Item):
     ]
 
     if not ProblemName.isEasyEnv:
-        move_map[3][3] = [LEFT, UP]
+        move_map[3][3] = [LEFT, UP, RIGHT]
     if ProblemName.isHardEnv:
         move_map[5][3] = [UP, RIGHT]
 
