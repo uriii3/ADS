@@ -2,83 +2,55 @@ from scipy.spatial import ConvexHull
 import numpy as np
 
 
-def is_dominated(x, y):
-    for j in range(len(x)):
-        if x[j] > y[j]:
-            return False
-    return True
-    #return (np.asarray(x) <= y).all()
-
-def belongs_to_positive_hull(vertex, hull):
-
-    for vertex2 in hull:
-        if not np.array_equal(vertex, vertex2):
-            for i in range(len(vertex)):
-                if is_dominated(vertex, vertex2):
-                    #print(vertex, " is dominated by ", vertex2)
-                    return False
-    return True
-
-
 def non_dominated(solutions):
     is_efficient = np.ones(solutions.shape[0], dtype=bool)
     for i, c in enumerate(solutions):
         if is_efficient[i]:
             # Remove dominated points, will also remove itself
-            jiii = (np.asarray(solutions[is_efficient]) <= c).all(axis=1)
-            is_efficient[is_efficient] = np.invert(jiii)
+            dominated_points = (np.asarray(solutions[is_efficient]) <= c).all(axis=1)
+            is_efficient[is_efficient] = np.invert(dominated_points)
             # keep the point itself, otherwise we would get an empty list
             is_efficient[i] = 1
 
     return solutions[is_efficient]
 
 
-
 def get_hull(points, CCS=True):
 
-    aux_needed = False
 
-    vertices = []
+    # if we want only the positive half of the hull we do this preprocessing step
+    # WARNING: This step is NOT necessary, but it seems to speed up execution
     if CCS:
-        #for vertex in points:
-        #    if belongs_to_positive_hull(vertex, points):
-                # print(vertex, " approves positive exam")
-        #        vertices.append(vertex)
-
-        #points = vertices
-
         points = non_dominated(np.array(points))
-    if aux_needed:
-        # Compute  auxiliary points
-        dim_maxs = np.max(points, axis=0)
-        for i in range(len(dim_maxs)):
-            aux_point = -100000*np.ones(len(dim_maxs))
-            aux_point[i] = dim_maxs[i]
 
-            # Add auxiliary points
-            points = np.append(points, np.array([aux_point]), axis=0)
 
-    # Compute new hull
+    # Compute new hull (try-except for handling hulls with less than 3 points)
+
+    dimension_redux_worked = False
     try:
-        hull = ConvexHull(points)
+        if CCS:
+            d = 0
+            while not dimension_redux_worked:
+                if np.max(points[:,d]) == np.min(points[:,d]):
+                    hull = ConvexHull(points[:,:d])
+                    dimension_redux_worked = True
+                else:
+                    d += 1
+
+        if not dimension_redux_worked:
+                hull = ConvexHull(points)
+
         hull_points = [points[vertex] for vertex in hull.vertices]
     except:
         hull_points = points
 
-    # Remove auxiliary points of new hull
-    vertices = []
-    #for vertex in hull_points:
 
-    #    if CCS:
-    #        if belongs_to_positive_hull(vertex, hull_points):
-                # print(vertex, " approves positive exam")
-    #            vertices.append(vertex)
-    #    else:
-    #        if np.linalg.norm(vertex) < 10000:
-    #            vertices.append(vertex)
-
-    # Get only for positive weights
-    vertices = non_dominated(np.array(hull_points))
+    # Now, if we want only the positive half of the hull, remove points that are optimal for negative weights
+    # WARNING: This step IS necessary for computing the half hull
+    if CCS:
+        vertices = non_dominated(np.array(hull_points))
+    else:
+        vertices = hull_points
 
     return np.array(vertices)
 
@@ -105,12 +77,6 @@ def translate_hull(point, gamma, hull):
         if len(point) > 0:
             hull = np.add(hull, point, casting="unsafe")
 
-        #for i in range(len(hull)):
-        #    hull[i] = np.multiply(hull[i], gamma, casting="unsafe")
-        #    if point == []:
-        #        pass
-        #    else:
-        #        hull[i] = np.add(hull[i], point,casting="unsafe")
     return hull
 
 
@@ -165,7 +131,53 @@ if __name__ == "__main__":
 
     points = np.random.rand(42, 2)   # 15 random points in 2-D
 
-    puntitos = -1*np.array([[0, 0, 4], [0, 5, 3], [1, 7, 0], [2, 1, 4], [3, 4, 5], [4, 2, 3], [4, 4, 6], [4, 6, 7], [5, 0, 2], [6, 4, 1], [6, 5, 1], [6, 7, 0], [7, 4, 3]])
+    puntitos = [[-4.,0.,0.],
+     [-3.75,-1.25,0.],
+    [-3.625,-1.40625,0.],
+    [-3.34375,-1.5625,0.],
+    [-3.21875,-1.71875,0.],
+    [-2.84375,-1.875,0.],
+    [-2.65625,-2.03125,0.],
+    [-2.375,-2.1875,0.],
+    [-1.5,-2.5,0.],
+    [-1.34375,-2.8125,0.],
+    [-1.21875,-2.96875,0.],
+    [-0.84375,-3.125,0.],
+    [-0.65625,-3.28125,0.],
+    [-0.375,-3.4375,0.],
+    [0.25,-3.75,0.],
+    [0.375,-3.90625,0.],
+    [0.65625,-4.0625,0.],
+    [0.78125,-4.21875,0.],
+    [1.15625,-4.375,0.],
+    [1.34375,-4.53125,0.],
+    [1.625,-4.6875,0.],
+    [3.,-5.,0.],
+    [3.15625,-5.625,0.],
+    [3.34375,-5.78125,0.],
+    [3.625,-5.9375,0.],
+    [4.25,-6.25,0.],
+    [4.375,-6.40625,0.],
+    [4.65625,-6.5625,0.],
+    [4.78125,-6.71875,0.],
+    [5.15625,-6.875,0.],
+    [5.34375,-7.03125,0.],
+    [5.625,-7.1875,0.],
+    [6.5,-7.5,0.],
+    [6.65625,-7.8125,0.],
+    [6.78125,-7.96875,0.],
+    [7.15625,-8.125,0.],
+    [7.34375,-8.28125,0.],
+    [7.625,-8.4375,0.],
+    [8.25,-8.75,0.],
+    [8.375,-8.90625,0.],
+    [8.65625,-9.0625,0.],
+    [8.78125,-9.21875,0.],
+    [9.15625,-9.375,0.],
+    [9.34375, -9.53125,0.],
+    [9.625,-9.6875,0.],
+    [12.,-10.,0.]]
+    puntitos = np.array(puntitos)
     print(puntitos)
 
     v_function = [[3., 2.],
