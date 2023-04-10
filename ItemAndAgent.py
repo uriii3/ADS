@@ -174,7 +174,7 @@ class Agent(Item):
 
         velocity = 1
 
-        if direction_agent >= Agent.NB_ACTIONS/2:
+        if direction_agent >= Agent.NB_ACTIONS/2 and self.car:
             velocity = 2
 
         if direction_agent == Agent.DOWN:
