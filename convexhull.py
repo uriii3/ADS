@@ -31,7 +31,7 @@ def get_hull(points, CCS=True):
         if CCS:
             d = 0
             while not dimension_redux_worked:
-                if np.max(points[:, d]) - np.min(points[:, d]) < 0.00001:
+                if np.abs(np.max(points[:, d]) - np.min(points[:, d])) < 0.00001:
                     hull = ConvexHull(np.delete(points, d, 1))
                     dimension_redux_worked = True
                 else:
