@@ -31,8 +31,8 @@ def get_hull(points, CCS=True):
         if CCS:
             d = 0
             while not dimension_redux_worked:
-                if np.max(points[:,d]) == np.min(points[:,d]):
-                    hull = ConvexHull(points[:,:d])
+                if np.max(points[:, d]) - np.min(points[:, d]) < 0.00001:
+                    hull = ConvexHull(np.delete(points, d, 1))
                     dimension_redux_worked = True
                 else:
                     d += 1
@@ -61,7 +61,7 @@ def get_hull(points, CCS=True):
                 dist3 = np.linalg.norm(new_vertices[-1] - vertices[i+1])
                 if np.abs(dist1 + dist2 - dist3) > 0.001:
                     new_vertices.append(vertices[i])
-
+            new_vertices.append(vertices[-1])
 
 
             #for p in hull_points:
