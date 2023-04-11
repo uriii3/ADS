@@ -2,6 +2,7 @@ from CHVI import partial_convex_hull_value_iteration
 from Lex import lex_max
 from WeightsFinder import minimal_weight_computation, minimal_weight_computation_all_states
 import numpy as np
+import pickle
 
 def ethical_embedding_state(hull_state, l_ordering, individual_weight=0, epsilon=0.0):
     """
@@ -48,7 +49,7 @@ def ethical_embedding(hull, l_ordering, initial_states, individual_weight=0, eps
     return w
 
 
-def Ethical_Environment_Designer(env, l_ordering, epsilon, discount_factor=1.0, max_iterations=5):
+def Ethical_Environment_Designer(env, l_ordering, epsilon, discount_factor=1.0, max_iterations=15):
     """
     Calculates the Ethical Environment Designer in order to guarantee ethical
     behaviours in value alignment problems.
@@ -63,7 +64,8 @@ def Ethical_Environment_Designer(env, l_ordering, epsilon, discount_factor=1.0, 
 
     initial_states = [[43, 45, 31]]
     try:
-       hull = np.load("v_function.npy", allow_pickle=True)
+        with open(r"v_function.pickle", "rb") as input_file:
+            v_func = pickle.load(input_file)
     except:
         hull = partial_convex_hull_value_iteration(env, discount_factor, max_iterations)
 
@@ -88,10 +90,10 @@ if __name__ == "__main__":
     from ADS_Environment import Environment
     env = Environment()
     epsilon = 0.1
-    lex_ordering = [0,2,1] # order the correct values!! [1,2,0]
+    lex_ordering = [1, 2, 0] # order the correct values!! [1,2,0]
     # Sembla que: 0: individual, 1: internal, 2: external!!
     discount_factor = 1.0
-    max_iterations = 5
+    max_iterations = 15
 
     w_E = Ethical_Environment_Designer(env, lex_ordering, epsilon, discount_factor, max_iterations)
 
