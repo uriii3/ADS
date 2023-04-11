@@ -104,7 +104,7 @@ def partial_convex_hull_value_iteration(env, discount_factor=1.0, max_iterations
 
                         V[cell_L][cell_R][cell_J] = Q_function_calculator(env, [cell_L, cell_R, cell_J], V, discount_factor, model_used, eps)
 
-        #print("Iterations: ", iteration, "/", max_iterations)
+        print("Iterations: ", iteration, "/", max_iterations)
         #print(V[43][38][31])
     return V
 
