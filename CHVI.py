@@ -6,7 +6,7 @@ agent_2_actions = Environment.pedestrian_move_map
 
 
 
-def Q_function_calculator(env, state, V, discount_factor, model_used=None):
+def Q_function_calculator(env, state, V, discount_factor, model_used=None, epsilon=-1.0):
     """
 
     Calculates the (partial convex hull)-value of applying each action to a given state.
@@ -40,26 +40,27 @@ def Q_function_calculator(env, state, V, discount_factor, model_used=None):
                     rewards = all_things[:3]
 
 
+
                 else:
                     env.easy_reset(state_translated[0], state_translated[1], state_translated[2])
                     next_state, rewards, _ = env.step([action, act2, act3])
 
+
                 V_state = dividing_factor*V[next_state[0]][next_state[1]][next_state[2]].copy()
                 alt_rewards = dividing_factor*rewards
                 hull_sa = convexhull.translate_hull(alt_rewards, discount_factor, V_state)
-                hull_sa_all = convexhull.sum_hulls(hull_sa, hull_sa_all)
+                hull_sa_all = convexhull.sum_hulls(hull_sa, hull_sa_all, epsilon=epsilon)
 
         for point in hull_sa_all:
             hulls.append(point)
 
     hulls = np.unique(np.array(hulls), axis=0)
 
-    new_hull = convexhull.get_hull(hulls)
+    new_hull = convexhull.get_hull(hulls, epsilon=epsilon)
 
     return new_hull
 
-
-def partial_convex_hull_value_iteration(env, discount_factor=1.0, max_iterations=5, model_used=None):
+def partial_convex_hull_value_iteration(env, discount_factor=1.0, max_iterations=20, model_used=None):
     """
     Partial Convex Hull Value Iteration algorithm adapted from "Convex Hull Value Iteration" from
     Barret and Narananyan's 'Learning All Optimal Policies with Multiple Criteria' (2008)
@@ -84,17 +85,27 @@ def partial_convex_hull_value_iteration(env, discount_factor=1.0, max_iterations
 
     iteration = 0
     print("Number of states:", len(env.states_agent_left) * len(env.states_agent_right) ** 2)
-
+    eps = origi_eps = 0.7
     while iteration < max_iterations:
         iteration += 1
+        n_states = 0
+        if origi_eps >= 0.0:
+            eps *= origi_eps
         # Sweep for every state
+
         for cell_L in env.states_agent_left:
             for cell_R in env.states_agent_right:
                 for cell_J in env.states_agent_right:
                     if cell_R >= cell_J:
-                        V[cell_L][cell_R][cell_J] = Q_function_calculator(env, [cell_L, cell_R, cell_J], V, discount_factor, model_used)
+                        n_states += 1
+                        if n_states % 1000 == 0:
+                            pass
+                            #print(n_states)
 
-        print("Iterations: ", iteration, "/", max_iterations)
+                        V[cell_L][cell_R][cell_J] = Q_function_calculator(env, [cell_L, cell_R, cell_J], V, discount_factor, model_used, eps)
+
+        #print("Iterations: ", iteration, "/", max_iterations)
+        #print(V[43][38][31])
     return V
 
 
