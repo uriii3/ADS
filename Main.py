@@ -1,4 +1,4 @@
-from CHVI import partial_convex_hull_value_iteration
+from CHVI_aprox import partial_convex_hull_value_iteration
 from Lex import lex_max
 from WeightsFinder import minimal_weight_computation, minimal_weight_computation_all_states
 import numpy as np
@@ -90,7 +90,7 @@ if __name__ == "__main__":
     from ADS_Environment import Environment
     env = Environment()
     epsilon = 0.1
-    lex_ordering = [1, 2, 0] # order the correct values!! [1,2,0]
+    lex_ordering = [0,1, 2] # order the correct values!! [1,2,0]
     # Sembla que: 0: individual, 1: internal, 2: external!!
     discount_factor = 1.0
     max_iterations = 15
