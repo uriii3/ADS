@@ -102,7 +102,7 @@ def get_hull(points, CCS=True, epsilon=0.0):
 
 def translate_hull(point, gamma, hull):
     """
-    From Barret and Narananyan's 'Learning All Optimal Policies with Multiple Criteria' (2008)
+    From Barret and Narananyan's 'Learning All Optimal Policies_45_31 with Multiple Criteria' (2008)
 
     Translation and scaling operation of convex hulls (definition 1 of the paper).
 
@@ -134,7 +134,7 @@ def translate_hull(point, gamma, hull):
 
 def sum_hulls(hull_1, hull_2, epsilon=0.0):
     """
-    From Barret and Narananyan's 'Learning All Optimal Policies with Multiple Criteria' (2008)
+    From Barret and Narananyan's 'Learning All Optimal Policies_45_31 with Multiple Criteria' (2008)
 
     Sum operation of convex hulls (definition 2 of the paper)
 
@@ -159,7 +159,7 @@ def sum_hulls(hull_1, hull_2, epsilon=0.0):
 
 def max_q_value(weight, hull):
     """
-    From Barret and Narananyan's 'Learning All Optimal Policies with Multiple Criteria' (2008)
+    From Barret and Narananyan's 'Learning All Optimal Policies_45_31 with Multiple Criteria' (2008)
 
     Extraction of the Q-value (definition 3 of the paper)
 

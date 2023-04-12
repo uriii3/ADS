@@ -74,7 +74,7 @@ class Environment:
 
     initial_agent_left_position = [6, 1] #-> 43
     initial_agent_right_position = [4, 3] #-> 31
-    initial_pedestrian_2_position = [5, 3] #-> 38
+    initial_pedestrian_2_position = [6, 3] #-> 45
 
     agent_left_goal = [1, 6]
     agent_right_goal = [2, 6]

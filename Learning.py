@@ -351,8 +351,8 @@ if __name__ == "__main__":
 
     # Parameters to change in each run
     alpha = 0.8
-    weights = [1.0, 0.0, 0.0]
-    lexicographic_order = "000"
+    weights = [1.0, 0.372, 1.5]
+    lexicographic_order = "210"
     max_episodes = 50000
     save = True
 
@@ -362,7 +362,7 @@ if __name__ == "__main__":
     print("The Learnt Policy has the following Value for alpha = ", alpha, " is:")
 
     if save:
-        np.save("./Policies/policy_lex" + lexicographic_order + ".npy", policy) #changepo
+        np.save("./Policies_45_31/policy_lex" + lexicographic_order + ".npy", policy) #changepo
 
     print("-------------------")
     print("Finnished!!!")

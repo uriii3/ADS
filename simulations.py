@@ -83,7 +83,7 @@ class QLearner:
 
 if __name__ == "__main__":
 
-    policy = np.load('./Policies/policy_lex021.npy')
+    policy = np.load('Policies_45_31/policy_lex210.npy')
 
     env = Environment(is_deterministic=True)
     print()

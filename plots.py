@@ -35,19 +35,19 @@ def plotting(environment, policies_to_compare):
     if policies_to_compare[len(policies_to_compare)-1] == "unethical":
         unethical = True
         for i in range(0, len(policies_to_compare)-1):
-            vpolicies.append(np.load('./Policies/policy_lex' + policies_to_compare[i] + '.npy'))
+            vpolicies.append(np.load('./Policies_45_31/policy_lex' + policies_to_compare[i] + '.npy'))
         for i in range(0,n_unethical_policies): # change in case more policies are added
-            vpolicies.append(np.load('./Policies/policy_lexunethical' + str(i) + '.npy'))
+            vpolicies.append(np.load('./Policies_45_31/policy_lexunethical' + str(i) + '.npy'))
 
     else:
         for i in range(0, len(policies_to_compare)):
-            vpolicies.append(np.load('./Policies/policy_lex' + policies_to_compare[i] + '.npy'))
+            vpolicies.append(np.load('./Policies_45_31/policy_lex' + policies_to_compare[i] + '.npy'))
 
     n_steps = np.zeros(n_policies, dtype=object)
     n_peatons_run = np.zeros(n_policies, dtype=object)
     n_dangerous_driving = np.zeros(n_policies, dtype=object)
     n_bumps_coll = np.zeros(n_policies, dtype=object)
-    v_steps = np.zeros((n_policies, 20))
+    v_steps = np.zeros((n_policies, 15))
     v_peatons_run = np.zeros((n_policies, 4))
     v_dangerous_driving = np.zeros((n_policies, 4))
     v_bumps_coll = np.zeros((n_policies, 5))

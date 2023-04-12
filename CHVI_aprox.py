@@ -64,7 +64,7 @@ def Q_function_calculator(env, state, V, discount_factor, model_used=None, epsil
 def partial_convex_hull_value_iteration(env, discount_factor=1.0, max_iterations=50, model_used=None):
     """
     Partial Convex Hull Value Iteration algorithm adapted from "Convex Hull Value Iteration" from
-    Barret and Narananyan's 'Learning All Optimal Policies with Multiple Criteria' (2008)
+    Barret and Narananyan's 'Learning All Optimal Policies_45_31 with Multiple Criteria' (2008)
 
     Calculates the partial convex hull for each state of the MOMDP
 
