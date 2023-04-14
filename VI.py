@@ -288,7 +288,9 @@ if __name__ == "__main__":
     print("The Ethical Weight of the Scalarisation Function is set to W_E = " + str(w_E) + ", found by our Algorithm.")
     print("-------------------")
     print("Learning Process started. Will finish when Delta < Theta.")
-    weights = [1.0, 0.31, 0.013]
+    weights = [1.0, 0.255, 0.007]
+    env.initial_pedestrian_1_position = env.translate_state_cell(31)
+    env.initial_pedestrian_2_position = env.translate_state_cell(38)
     #weights = [1.0, w_E, w_E]
 
     #generate_model(env)
@@ -300,7 +302,7 @@ if __name__ == "__main__":
     print("-------------------")
 
     car = 43
-    person = 45
+    person = 38
     person2 = 31
     print(v[car][person][person2])
 

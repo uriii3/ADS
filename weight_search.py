@@ -3,10 +3,10 @@ import numpy as np
 
 from ADS_Environment import Environment
 
-lex_ordering = [2, 0, 1]  # order the correct values!! [1,2,0]
+lex_ordering = [1, 0, 2]  # order the correct values!! [1,2,0]
 initial_states = [[43, 38, 31]]
 env = Environment()
-epsilon = 0.01
+epsilon = 0.04
 w_E = [0, 0, 0]
 while w_E != [None, None, None]:
     epsilon += 0.01

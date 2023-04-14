@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     from ADS_Environment import Environment
     env = Environment()
-    epsilon = 0.01
+    epsilon = 0.05
     lex_ordering = [1,0,2] # order the correct values!! [1,2,0]
     initial_states = [[43, 38, 31]]
     # Sembla que: 0: individual, 1: internal, 2: external!!

@@ -12,9 +12,9 @@ import numpy as np
 
 
 def main():
-    v_lexico = ['102', '120', '012', '021', '210', '201']
-    v_good = [False, False, False, False, False,
-              False]  # if some lexicographic order has already a good policy mark it here
+    v_lexico = ['102', '120', '012', '021', '210', '201', 'unethical']
+    v_good = [False, False, False, True, True,
+              True, False]  # if some lexicographic order has already a good policy mark it here
 
     # Basics things to change manually:
     pedestrian1_position = 31
@@ -25,19 +25,21 @@ def main():
                  [1.0, 0.052, 0.00001],
                  [1.0, 0.001, 0.03],
                  [1.0, 6.0, 20.0],
-                 [1.0, 0.001, 0.66]]
+                 [1.0, 0.001, 0.66],
+                 [1.0, 0.0, 0.0]]
 
     v_values = [[7.0, 0.0, -8.1875],
                 [5.765625, 0.0, 0.0],
                 [10.0, -20.0, - 6.0],
                 [10.0, - 30.0, - 1.125],
                 [5.765625, 0.0, 0.0],
-                [9.5625, - 30.0, 0.0]]
+                [9.5625, - 30.0, 0.0],
+                [10, -30, 0.0]] # no estic segur dels valors hehe
 
     # Preparations before loop
     env = Environment(is_deterministic=True)
     max_weights = 15000
-    alpha = 0.8
+    alpha = 0.7
     print(env.translate_state_cell(pedestrian1_position))
     env.initial_pedestrian_1_position = env.translate_state_cell(pedestrian1_position)
     env.initial_pedestrian_2_position = env.translate_state_cell(pedestrian2_position)
@@ -46,7 +48,7 @@ def main():
         print('hola')
         if not is_good:
             print("Learning order ...", order)
-            policy, v, q = q_learning(env, weights, alpha=alpha, max_weights=max_weights, max_episodes=50000)
+            policy, v, q = q_learning(env, weights, alpha=alpha, max_weights=max_weights, max_episodes=60000)
             print("-------------------")
 
             print("The Learnt Policy has the following Value:")
