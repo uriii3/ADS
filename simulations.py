@@ -52,6 +52,7 @@ def example_execution(env, policy, render=False, stop=False):
                 print("ara!")
                 print(rewards[2])
             if rewards[1] != 0.0: n_bumps_coll += 1
+            print(rewards)
 
             done = dones[0]  # R Agent does not interfere
 
@@ -83,9 +84,11 @@ class QLearner:
 
 if __name__ == "__main__":
 
-    policy = np.load('Policies_45_31/policy_lex210.npy')
+    policy = np.load('Policies_38_31/policy_lex120.npy')
 
     env = Environment(is_deterministic=True)
+    env.initial_pedestrian_2_position = env.translate_state_cell(38)
+
     print()
     print("-----------------------------------")
     print("Starting simulations!")

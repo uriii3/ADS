@@ -191,9 +191,9 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
         state = env.get_state()
 
-        if episode % 100 == 0:
+        if episode % 20000 == 0:
             print("Episode : ", episode)
-            print(Q[43, 45, 31])
+            print(Q[43, env.translate(env.initial_pedestrian_2_position), env.translate(env.initial_pedestrian_1_position)])
             #print(Q[43, 45, 31])
             #print(infoQ[43, 45, 31])
             #valpha.append(current_alpha)
@@ -240,7 +240,8 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
             state = new_state
             done = dones[0]
 
-        q = Q[43, 45, 31].copy()
+        print(reward)
+        q = Q[43, env.translate(env.initial_pedestrian_2_position), env.translate(env.initial_pedestrian_1_position)].copy()
         sq = scalarised_Qs(env, q, weights)
 
         # a = np.argmax(sq)
@@ -362,7 +363,7 @@ if __name__ == "__main__":
     print("The Learnt Policy has the following Value for alpha = ", alpha, " is:")
 
     if save:
-        np.save("./Policies_45_31/policy_lex" + lexicographic_order + ".npy", policy) #changepo
+        np.save("./Policies_38_31/policy_lex" + lexicographic_order + ".npy", policy) #changepo
 
     print("-------------------")
     print("Finnished!!!")

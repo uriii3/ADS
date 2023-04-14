@@ -73,8 +73,8 @@ class Environment:
     EC = 4 # EVERYONE CELL (for everyone)
 
     initial_agent_left_position = [6, 1] #-> 43
-    initial_agent_right_position = [4, 3] #-> 31
-    initial_pedestrian_2_position = [6, 3] #-> 45
+    initial_pedestrian_1_position = [4, 3] #-> 31
+    initial_pedestrian_2_position = [5, 3] #-> 38
 
     agent_left_goal = [1, 6]
     agent_right_goal = [2, 6]
@@ -192,7 +192,7 @@ class Environment:
 
         return item
 
-    def generate_agents(self, where_left=initial_agent_left_position, where_right=initial_agent_right_position, where_p2=initial_pedestrian_2_position, where_goal_left=agent_left_goal, where_goal_right=agent_right_goal):
+    def generate_agents(self, where_left=initial_agent_left_position, where_right=initial_pedestrian_1_position, where_p2=initial_pedestrian_2_position, where_goal_left=agent_left_goal, where_goal_right=agent_right_goal):
 
 
         agents = list()
@@ -222,7 +222,7 @@ class Environment:
 
         return items
 
-    def reset(self, mode='soft', where_left=initial_agent_left_position, where_right = initial_agent_right_position, where_ped2 = initial_pedestrian_2_position, where_garbage=-1):
+    def reset(self, mode='soft', where_left=initial_agent_left_position, where_right = initial_pedestrian_1_position, where_ped2 = initial_pedestrian_2_position, where_garbage=-1):
         """
         Returns the game to its original state, before the player or another agent have changed anything.
         :return:
@@ -238,7 +238,7 @@ class Environment:
         if mode == 'hard':
             self.garbage_in_basket = False
 
-    def easy_reset(self, where_left=initial_agent_left_position, where_right = initial_agent_right_position, where_p2 = initial_pedestrian_2_position):
+    def easy_reset(self, where_left=initial_agent_left_position, where_right = initial_pedestrian_1_position, where_p2 = initial_pedestrian_2_position):
 
         move = self.agents[0].move_request(0, i_insist=where_left)
         hum1 = self.do_move_or_not(move)
@@ -250,7 +250,7 @@ class Environment:
         hum3 = self.do_move_or_not(move)
 
 
-    def hard_reset(self, where_left=initial_agent_left_position, where_right = initial_agent_right_position, where_p2 = initial_pedestrian_2_position, where_garbage=-1):
+    def hard_reset(self, where_left=initial_agent_left_position, where_right = initial_pedestrian_1_position, where_p2 = initial_pedestrian_2_position, where_garbage=-1):
         """
         Returns the game to its original state, before the player or another agent have changed anything.
         :return:

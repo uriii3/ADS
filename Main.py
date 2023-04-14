@@ -49,7 +49,7 @@ def ethical_embedding(hull, l_ordering, initial_states, individual_weight=0, eps
     return w
 
 
-def Ethical_Environment_Designer(env, l_ordering, epsilon, discount_factor=1.0, max_iterations=15):
+def Ethical_Environment_Designer(env, l_ordering, epsilon, discount_factor=1.0, max_iterations=15, initial_states = [[43, 45, 31]]):
     """
     Calculates the Ethical Environment Designer in order to guarantee ethical
     behaviours in value alignment problems.
@@ -62,7 +62,6 @@ def Ethical_Environment_Designer(env, l_ordering, epsilon, discount_factor=1.0, 
     :return: the ethical weight that solves the ethical embedding problem
     """
 
-    initial_states = [[43, 45, 31]]
     try:
         with open(r"v_function.pickle", "rb") as input_file:
             hull = pickle.load(input_file)
@@ -72,7 +71,7 @@ def Ethical_Environment_Designer(env, l_ordering, epsilon, discount_factor=1.0, 
     print("-----")
     print("Partial Convex hull of the initial state s_0:") # això és un comentari per veure canvis al git
     hull_s0 = hull[initial_states[0][0]][initial_states[0][1]][initial_states[0][2]]
-    print(hull_s0)
+    #print(hull_s0)
     print("-----")
 
     individual_obj = env.individual_objective
@@ -89,20 +88,13 @@ if __name__ == "__main__":
 
     from ADS_Environment import Environment
     env = Environment()
-    epsilon = 0.1
-    lex_ordering = [0,1, 2] # order the correct values!! [1,2,0]
+    epsilon = 0.01
+    lex_ordering = [1,0,2] # order the correct values!! [1,2,0]
+    initial_states = [[43, 38, 31]]
     # Sembla que: 0: individual, 1: internal, 2: external!!
     discount_factor = 1.0
     max_iterations = 15
 
-    w_E = Ethical_Environment_Designer(env, lex_ordering, epsilon, discount_factor, max_iterations)
+    w_E = Ethical_Environment_Designer(env, lex_ordering, epsilon, discount_factor, max_iterations, initial_states)
 
     print("Ethical weights found: ", w_E)
-    # 0.12: [1.0, 0.08799674999999998, 1e-05]
-    # 0.13: [1.0, 0.08699675000000001, 9.999999999999999e-06]
-    # 0.15: [1.0, 0.08499675000000001, 9.999999999999999e-06]
-    # 0.2: [1.0, 0.07999675000000002, 1.0000000000000003e-05]
-    # 0.22: [1.0, 0.07466666666666667, 0.01025641025641028]
-    # 0.23: [1.0, 0.07200000000000001, 0.0153846153846154]
-    # 0.24: [1.0, 0.06933333333333333, 0.020512820512820516]
-    # 0.249: [1.0, 0.06693333333333333, 0.008000000000000007]

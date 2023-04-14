@@ -1,6 +1,7 @@
 import numpy as np
 import convexhull
 from ADS_Environment import Environment
+import pickle
 
 agent_2_actions = Environment.pedestrian_move_map
 
@@ -101,7 +102,8 @@ def partial_convex_hull_value_iteration(env, discount_factor=1.0, max_iterations
 def learn_and_do():
     env = Environment()
     v = partial_convex_hull_value_iteration(env, model_used=None)
-    np.save("v_function.npy", v)
+    with open(r"v_function.pickle", "wb") as output_file:
+        pickle.dump(v, output_file)
 
 
 if __name__ == "__main__":
@@ -112,10 +114,11 @@ if __name__ == "__main__":
         learn_and_do()
 
     # Returns partial convex hull of initial state
-    v_func = np.load("v_function.npy", allow_pickle=True)
+    with open(r"v_function.pickle", "rb") as input_file:
+        v_func = pickle.load(input_file)
     #print(v_func[43][31][31])
     print("--")
     #print(v_func[43][38][38])
-    print(v_func[43][38][31])
+    print(v_func[43][45][31])
 
 

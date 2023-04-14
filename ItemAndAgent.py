@@ -201,6 +201,7 @@ class Agent(Item):
             return move
         else:
             return Move(self, moved, origin, origin)
+
     def act(self):
         """
         A method to randomly choose a possible action.
