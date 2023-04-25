@@ -12,7 +12,7 @@ def transcribe_label(numeros):
     return numeros + ": " + dictionary2[first] + " > " + dictionary2[second] + " > " + dictionary2[third]
 
 
-def plotting(environment, policies_to_compare):
+def plotting(environment, policies_to_compare, initial_state):
 
     """
     Simulation of the environment without learning.
@@ -31,17 +31,18 @@ def plotting(environment, policies_to_compare):
     vpolicies = []
     n_unethical_policies = 2
 
+    root = './Policies_' + initial_state + '/'
     # We save all policies we will compare inside the vector:
     if policies_to_compare[len(policies_to_compare)-1] == "unethical":
         unethical = True
         for i in range(0, len(policies_to_compare)-1):
-            vpolicies.append(np.load('./Policies_45_31/policy_lex' + policies_to_compare[i] + '.npy'))
+            vpolicies.append(np.load(root + 'policy_lex' + policies_to_compare[i] + '.npy'))
         for i in range(0,n_unethical_policies): # change in case more policies are added
-            vpolicies.append(np.load('./Policies_45_31/policy_lexunethical' + str(i) + '.npy'))
+            vpolicies.append(np.load(root + 'policy_lexunethical' + str(i) + '.npy'))
 
     else:
         for i in range(0, len(policies_to_compare)):
-            vpolicies.append(np.load('./Policies_45_31/policy_lex' + policies_to_compare[i] + '.npy'))
+            vpolicies.append(np.load(root + 'policy_lex' + policies_to_compare[i] + '.npy'))
 
     n_steps = np.zeros(n_policies, dtype=object)
     n_peatons_run = np.zeros(n_policies, dtype=object)
@@ -135,7 +136,7 @@ def plotting(environment, policies_to_compare):
         plt.axvline(x=xx+0.5, linestyle='--', alpha = 0.3, color='red', lw=0.5)
     plt.subplot(4, 1, 3)
     plt.title("Dangerous driving situations in one go", y=1.0, pad=-14)
-    plt.legend(loc='center right', bbox_to_anchor=(1.1, 1.0), fancybox=True, shadow=True)
+    plt.legend(loc='center right', bbox_to_anchor=(1.1, 0.8), fancybox=True, shadow=True)
     for xx in np.arange(len(v_dangerous_driving[0])):
         plt.axvline(x=xx + 0.5, linestyle='--', alpha=0.3, color='red', lw=0.5)
     plt.subplot(4, 1, 4)
@@ -153,7 +154,8 @@ def plotting(environment, policies_to_compare):
     print(str(n_dangerous_driving/number_of_simulations) + ' has been the average dangerous driving situations while reaching it\'s destination')
 
 
-if __name__ == "__main__":
+def main():
+    initial_state = "38_31"
 
     policies_to_compare = [
         "210",
@@ -166,10 +168,15 @@ if __name__ == "__main__":
     ]
 
     # Initialize the environment:
-    env = Environment(is_deterministic=True)
+    env = Environment(is_deterministic=True) # he d'anar amb compte amb això!!
+    env.initial_pedestrian_1_position = env.translate_state_cell(31)
+    env.initial_pedestrian_2_position = env.translate_state_cell(38)
     print()
     print("-----------------------------------")
     print("Starting simulations!")
     print("-----------------------------------")
 
-    plotting(env, policies_to_compare)
+    plotting(env, policies_to_compare, initial_state)
+
+
+main()

@@ -288,7 +288,7 @@ if __name__ == "__main__":
     print("The Ethical Weight of the Scalarisation Function is set to W_E = " + str(w_E) + ", found by our Algorithm.")
     print("-------------------")
     print("Learning Process started. Will finish when Delta < Theta.")
-    weights = [1.0, 0.255, 0.007]
+    weights = [1.0, 0.253, 0.02]
     env.initial_pedestrian_1_position = env.translate_state_cell(31)
     env.initial_pedestrian_2_position = env.translate_state_cell(38)
     #weights = [1.0, w_E, w_E]

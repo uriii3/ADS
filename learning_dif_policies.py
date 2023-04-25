@@ -13,7 +13,7 @@ import numpy as np
 
 def main():
     v_lexico = ['102', '120', '012', '021', '210', '201', 'unethical']
-    v_good = [False, False, False, True, True,
+    v_good = [False, True, True, True, True,
               True, False]  # if some lexicographic order has already a good policy mark it here
 
     # Basics things to change manually:
@@ -22,7 +22,7 @@ def main():
 
     v_weights = [[1.0, 0.255, 0.007],
                  [1.0, 2.25, 7.6],
-                 [1.0, 0.052, 0.00001],
+                 [1.0, 0.07, 0.00001],
                  [1.0, 0.001, 0.03],
                  [1.0, 6.0, 20.0],
                  [1.0, 0.001, 0.66],

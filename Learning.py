@@ -2,6 +2,7 @@ import numpy as np
 from ADS_Environment import Environment
 import threading
 import time
+import matplotlib.pyplot as plt
 
 RIGHT = 0
 UP = 1
@@ -180,14 +181,14 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     # eps_reduc = epsilon / max_episodes  # per trobar les accions (exploration vs exploitation)
     infoQ = np.zeros([n_cells, n_cells, n_cells])
     # alpha_reduc = 0.5 * alpha / max_episodes  # pel pas de cada correcció
-    #valpha = []
-    #vepsilon = []
-    #verror0 = []
-    #verror1 = []
-    #verror2 = []
+    valpha = []
+    vepsilon = []
+    verror0 = []
+    verror1 = []
+    verror2 = []
 
     # current_alpha = 0.5
-    #current_eps = 0.3
+    current_eps = 0.3
     #reward = [0, 0, 0]
 
     for episode in range(1, max_episodes + 1):
@@ -197,16 +198,16 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
         state = env.get_state()
 
-        if episode % 5000 == 0:
+        if episode % 1000 == 0:
             print("Episode : ", episode)
             print(Q[43, env.translate(env.initial_pedestrian_2_position), env.translate(env.initial_pedestrian_1_position)])
         # print(Q[43, 45, 31])
         # print(infoQ[43, 45, 31])
-        # valpha.append(current_alpha)
-        # vepsilon.append(current_eps)
-        # verror0.append(Q[43,45,31][4][0])
-        # verror1.append(Q[43, 45, 31][4][1])
-        # verror2.append(Q[43, 45, 31][4][2])
+            valpha.append(alpha)
+            vepsilon.append(current_eps)
+            verror0.append(Q[43, 38, 31][0][0])
+            verror1.append(Q[43, 38, 31][0][1])
+            verror2.append(Q[43, 38, 31][0][2])
 
         step_count = 0
 
@@ -223,11 +224,11 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
             #current_max = 0.1
 
-            if episode > 20000:
+            if episode > 40000:# 2
                 alpha = 0.2
-            elif episode > 30000:
+            elif episode > 60000:# 3
                 alpha = 0.1
-            elif episode > 40000:
+            elif episode > 70000:# 4
                 alpha = 0.05
 
             # current_alpha = max(current_max, alpha - (0.0001 * infoQ[state[0]][state[1]][state[2]]))
@@ -255,7 +256,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     policy, V = deterministic_optimal_policy_calculator(Q, env, weights)
 
     # Plot the information gathered:
-    '''
+
     plt.figure(1)
     plt.subplot(2, 1, 1)
     plt.plot(np.arange(len(valpha)), valpha, label="Alpha")
@@ -275,7 +276,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     plt.plot(np.arange(len(verror2)), verror2, label="2")
     plt.legend()
     plt.show()
-    '''
+
 
     # np_graphics = np.array(for_graphics)
     # np.save('example.npy', np_graphics)
@@ -357,11 +358,11 @@ def main():
 
     # Parameters to change in each run
     alpha = 0.8
-    weights = [1.0, 0.32, 0.06]
-    lexicographic_order = "102"
+    weights = [1.0, 0.0, 0.0]
+    lexicographic_order = "unethical1"
     env.initial_pedestrian_1_position = env.translate_state_cell(31)
     env.initial_pedestrian_2_position = env.translate_state_cell(38)
-    max_episodes = 50000
+    max_episodes = 70000
     save = True
 
     # Training.

@@ -107,6 +107,9 @@ def partial_convex_hull_value_iteration(env, discount_factor=1.0, max_iterations
 
         print("Iterations: ", iteration, "/", max_iterations)
         print(V[43][38][31])
+        with open(r"v_function.pickle", "wb") as output_file:
+            pickle.dump(V, output_file)
+            print("File saved!")
     return V
 
 
