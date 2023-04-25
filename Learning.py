@@ -2,8 +2,6 @@ import numpy as np
 from ADS_Environment import Environment
 import threading
 import time
-import matplotlib.pyplot as plt
-
 
 RIGHT = 0
 UP = 1
@@ -18,8 +16,8 @@ def translate_action(action):
     :return: string with the name of the action
     """
 
-    part_1 = ""
-    part_2 = ""
+    #part_1 = ""
+    #part_2 = ""
 
     if action < 3:
         part_1 = "MOVE "
@@ -57,6 +55,7 @@ def scalarised_Qs(env, Q_state, w):
     """
     Scalarises the value of each Q(s,a) for a given state using a linear scalarisation function
 
+    :param env:
     :param Q_state: the different Q(s,a) for the state s, each with several components
     :param w: the weight vector of the scalarisation function
     :return: the scalarised value of each Q(s,a)
@@ -91,8 +90,10 @@ def Q_function_calculator(env, state, V, discount_factor):
                 next_state[0], next_state[1], next_state[2], objective]
     return Q_state
 
+
 def randomized_argmax(v):
     return np.random.choice(np.where(v == v.max())[0])
+
 
 def deterministic_optimal_policy_calculator(Q, env, weights):
     """
@@ -106,25 +107,29 @@ def deterministic_optimal_policy_calculator(Q, env, weights):
     # print ()
 
     policy = np.zeros(Q.shape[:-2])
-    V = np.zeros(Q.shape[:-2] + (Q.shape[4],)) # this should work in theory, all cells + objectives
+    V = np.zeros(Q.shape[:-2] + (Q.shape[4],))  # this should work in theory, all cells + objectives
 
-    for cell_car in  range(env.map_num_cells): # es podria acotar nombre de cel·les al nombre de cel·les a les que poden accedir??
+    for cell_car in range(
+            env.map_num_cells):  # es podria acotar nombre de cel·les al nombre de cel·les a les que poden accedir??
         for cell_pedestrian_1 in range(env.map_num_cells):
             for cell_pedestrian_2 in range(env.map_num_cells):
                 # One step lookahead to find the best action for this state
-                best_action = randomized_argmax(scalarised_Qs(env, Q[cell_car, cell_pedestrian_1, cell_pedestrian_2], weights))
-                policy[cell_car, cell_pedestrian_1, cell_pedestrian_2] =  best_action
-                V[cell_car, cell_pedestrian_1, cell_pedestrian_2] = Q[cell_car, cell_pedestrian_1, cell_pedestrian_2, best_action]
+                best_action = randomized_argmax(
+                    scalarised_Qs(env, Q[cell_car, cell_pedestrian_1, cell_pedestrian_2], weights))
+                policy[cell_car, cell_pedestrian_1, cell_pedestrian_2] = best_action
+                V[cell_car, cell_pedestrian_1, cell_pedestrian_2] = Q[
+                    cell_car, cell_pedestrian_1, cell_pedestrian_2, best_action]
 
     return policy, V
 
 
 def choose_action(env, state, eps, q_table, weights):
     """
-
+    :param env:
     :param state: the current state in the environment
     :param eps: the epsilon value
     :param q_table:  q_table or q_function the algorithm is following
+    :param weights:
     :return:  the most optimal action for the current state or a random action
     """
 
@@ -145,7 +150,7 @@ def update_q_table(q_table, env, weights, alpha, gamma, action, state, new_state
                 q_table[state[0], state[1], state[2], action, objective])
 
 
-def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episodes = 20000):
+def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episodes=20000):
     """
     Q-Learning Algorithm as defined in Sutton and Barto's 'Reinforcement Learning: An Introduction' Section 6.5,
     (1998).
@@ -158,6 +163,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     :param weights: the weight vector of the known linear scalarisation function
     :param alpha: the learning rate of the algorithm, can be set at discretion
     :param gamma: discount factor of the (MO)MPD, can be set at discretion (notice that this will change the Q-values)
+    :param max_weights:
     :param max_episodes: episodes taken into account in each q_learning
     :return: the learnt policy and its associated state-value (V) and state-action-value (Q) functions
     """
@@ -165,24 +171,24 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     n_objectives = env.n_objectives
     n_actions = env.n_actions
     n_cells = env.map_num_cells
-    V = np.zeros([n_cells, n_cells, n_cells, n_objectives])
+    #V = np.zeros([n_cells, n_cells, n_cells, n_objectives])
     Q = np.zeros([n_cells, n_cells, n_cells, n_actions, n_objectives])
 
     max_steps = 25
 
     epsilon = 0.99
-    #eps_reduc = epsilon / max_episodes  # per trobar les accions (exploration vs exploitation)
+    # eps_reduc = epsilon / max_episodes  # per trobar les accions (exploration vs exploitation)
     infoQ = np.zeros([n_cells, n_cells, n_cells])
-    #alpha_reduc = 0.5 * alpha / max_episodes  # pel pas de cada correcció
-    valpha = []
-    vepsilon = []
-    verror0 = []
-    verror1 = []
-    verror2 = []
+    # alpha_reduc = 0.5 * alpha / max_episodes  # pel pas de cada correcció
+    #valpha = []
+    #vepsilon = []
+    #verror0 = []
+    #verror1 = []
+    #verror2 = []
 
-    #current_alpha = 0.5
-    current_eps = 0.3
-    reward = [0,0,0]
+    # current_alpha = 0.5
+    #current_eps = 0.3
+    #reward = [0, 0, 0]
 
     for episode in range(1, max_episodes + 1):
         done = False
@@ -191,23 +197,20 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
         state = env.get_state()
 
-        if episode % 100 == 0:
+        if episode % 5000 == 0:
             print("Episode : ", episode)
-            print(Q[43, 45, 31])
-            #print(Q[43, 45, 31])
-            #print(infoQ[43, 45, 31])
-            #valpha.append(current_alpha)
-            #vepsilon.append(current_eps)
-            #verror0.append(Q[43,45,31][4][0])
-            #verror1.append(Q[43, 45, 31][4][1])
-            #verror2.append(Q[43, 45, 31][4][2])
-
+            print(Q[43, env.translate(env.initial_pedestrian_2_position), env.translate(env.initial_pedestrian_1_position)])
+        # print(Q[43, 45, 31])
+        # print(infoQ[43, 45, 31])
+        # valpha.append(current_alpha)
+        # vepsilon.append(current_eps)
+        # verror0.append(Q[43,45,31][4][0])
+        # verror1.append(Q[43, 45, 31][4][1])
+        # verror2.append(Q[43, 45, 31][4][2])
 
         step_count = 0
 
-        #alpha -= alpha_reduc  # per intentar aproximar-nos el màxim de ràpid i més fiablement a la funció òptima
-
-
+        # alpha -= alpha_reduc  # per intentar aproximar-nos el màxim de ràpid i més fiablement a la funció òptima
 
         while not done and step_count < max_steps:
             step_count += 1
@@ -218,7 +221,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
             actions.append(choose_action(env, state, current_eps, Q, weights))
 
-            current_max = 0.1
+            #current_max = 0.1
 
             if episode > 20000:
                 alpha = 0.2
@@ -227,7 +230,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
             elif episode > 40000:
                 alpha = 0.05
 
-            #current_alpha = max(current_max, alpha - (0.0001 * infoQ[state[0]][state[1]][state[2]]))
+            # current_alpha = max(current_max, alpha - (0.0001 * infoQ[state[0]][state[1]][state[2]]))
 
             new_state, reward, dones = env.step(actions)  # we take the actions
 
@@ -240,8 +243,9 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
             state = new_state
             done = dones[0]
 
-        q = Q[43, 45, 31].copy()
-        sq = scalarised_Qs(env, q, weights)
+        #q = Q[43, env.translate(env.initial_pedestrian_2_position), env.translate(
+        #    env.initial_pedestrian_1_position)].copy()
+        #sq = scalarised_Qs(env, q, weights)
 
         # a = np.argmax(sq)
         # print(q[a])
@@ -251,7 +255,8 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     policy, V = deterministic_optimal_policy_calculator(Q, env, weights)
 
     # Plot the information gathered:
-    '''plt.figure(1)
+    '''
+    plt.figure(1)
     plt.subplot(2, 1, 1)
     plt.plot(np.arange(len(valpha)), valpha, label="Alpha")
     plt.legend()
@@ -269,8 +274,8 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     plt.subplot(3, 1, 3)
     plt.plot(np.arange(len(verror2)), verror2, label="2")
     plt.legend()
-    plt.show()'''
-
+    plt.show()
+    '''
 
     # np_graphics = np.array(for_graphics)
     # np.save('example.npy', np_graphics)
@@ -285,12 +290,14 @@ def example_execution(env, policy, render=False, stop=False):
 
     :param env: the environment encoding the (MO)MDP
     :param policy: a function S -> A assigning to each state the corresponding recommended action
+    :param render:
+    :param stop:
     :return:
     """
     max_timesteps = 200
+    #n_incidents = 0
+    #n_peatons_atacs = 0
 
-    n_incidents = 0
-    n_peatons_atacs = 0
     for i in range(10):
         timesteps = 0
         env.hard_reset()
@@ -300,7 +307,7 @@ def example_execution(env, policy, render=False, stop=False):
         print("State :", state)
         done = False
 
-        #env.set_stats(i + 1, 99, 99, 99, 99)
+        # env.set_stats(i + 1, 99, 99, 99, 99)
         if render:
             if not env.drawing_paused():
                 time.sleep(0.5)
@@ -327,21 +334,20 @@ def example_execution(env, policy, render=False, stop=False):
                     time.sleep(0.5)
                     env.update_window()
 
+
 class QLearner:
     """
     A Wrapper for the Q-learning method, which uses multithreading
     in order to handle the game rendering.
     """
 
-    def __init__(self, environment, policy, drawing=False):
-
-        threading.Thread(target=example_execution, args=(environment, policy, drawing,)).start()
+    def __init__(self, env, policy, drawing=False):
+        threading.Thread(target=example_execution, args=(env, policy, drawing,)).start()
         if drawing:
             env.render('Evaluating')
 
 
-if __name__ == "__main__":
-
+def main():
     env = Environment(is_deterministic=True)
     max_weights = 15000
     print("-------------------")
@@ -351,8 +357,10 @@ if __name__ == "__main__":
 
     # Parameters to change in each run
     alpha = 0.8
-    weights = [1.0, 0.0, 0.0]
-    lexicographic_order = "000"
+    weights = [1.0, 0.32, 0.06]
+    lexicographic_order = "102"
+    env.initial_pedestrian_1_position = env.translate_state_cell(31)
+    env.initial_pedestrian_2_position = env.translate_state_cell(38)
     max_episodes = 50000
     save = True
 
@@ -362,12 +370,15 @@ if __name__ == "__main__":
     print("The Learnt Policy has the following Value for alpha = ", alpha, " is:")
 
     if save:
-        np.save("./Policies/policy_lex" + lexicographic_order + ".npy", policy) #changepo
+        np.save("./Policies_38_31/policy_lex" + lexicographic_order + ".npy", policy)  # changepo
 
     print("-------------------")
     print("Finnished!!!")
-    policy_value = v[43, 45, 31]
+    policy_value = v[43, 38, 31]
     print(policy_value)
 
-    #env = Environment(is_deterministic=True)
-    #QLearner(env, policy, drawing=True)
+    # env = Environment(is_deterministic=True)
+    # QLearner(env, policy, drawing=True)
+
+
+main()

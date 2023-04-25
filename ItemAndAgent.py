@@ -136,7 +136,7 @@ class Agent(Item):
     ]
 
     if not ProblemName.isEasyEnv:
-        move_map[3][3] = [LEFT, UP, RIGHT]
+        move_map[3][3] = [LEFT, UP]
     if ProblemName.isHardEnv:
         move_map[5][3] = [UP, RIGHT]
 
@@ -201,6 +201,7 @@ class Agent(Item):
             return move
         else:
             return Move(self, moved, origin, origin)
+
     def act(self):
         """
         A method to randomly choose a possible action.
