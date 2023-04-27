@@ -1,8 +1,8 @@
 import numpy as np
 from ValuesNorms import ProblemName
+import ValuesNorms
 
 # un altre intent de veure si els canvis del github i tal i qual funcionen correctament!
-
 
 def compare_positions(pos1, pos2):
     if pos1[0] == pos2[0] and pos1[1] == pos2[1]:
@@ -139,6 +139,8 @@ class Agent(Item):
         move_map[3][3] = [LEFT, UP]
     if ProblemName.isHardEnv:
         move_map[5][3] = [UP, RIGHT]
+    if ValuesNorms.ProblemName.isMoreStochastic:
+        move_map[3][3] = [LEFT, UP, RIGHT]
 
     def __init__(self, name, pos, goal, mat, car):
         Item.__init__(self, name, pos)

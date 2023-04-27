@@ -12,7 +12,7 @@ def example_execution(env, policy, render=False, stop=False):
     :return:
     """
     max_timesteps = 200
-    number_of_simulations = 500
+    number_of_simulations = 10
 
     n_steps = 0
     n_peatons_run = 0
@@ -84,13 +84,13 @@ class QLearner:
 
 if __name__ == "__main__":
 
-    policy = np.load('Policies_38_31/policy_lex102.npy')
+    policy = np.load('more_stochasticity/policy_lex012.npy')
 
-    env = Environment(is_deterministic=True)
-    env.initial_pedestrian_2_position = env.translate_state_cell(38)
+    env = Environment(is_deterministic=True, more_stochastic=True)
+    env.initial_pedestrian_2_position = env.translate_state_cell(45)
 
     print()
     print("-----------------------------------")
     print("Starting simulations!")
     print("-----------------------------------")
-    QLearner(env, policy, drawing=False)
+    QLearner(env, policy, drawing=True)

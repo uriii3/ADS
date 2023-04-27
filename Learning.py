@@ -181,11 +181,12 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     # eps_reduc = epsilon / max_episodes  # per trobar les accions (exploration vs exploitation)
     infoQ = np.zeros([n_cells, n_cells, n_cells])
     # alpha_reduc = 0.5 * alpha / max_episodes  # pel pas de cada correcció
+    '''
     valpha = []
     vepsilon = []
     verror0 = []
     verror1 = []
-    verror2 = []
+    verror2 = []'''
 
     # current_alpha = 0.5
     current_eps = 0.3
@@ -198,16 +199,16 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
         state = env.get_state()
 
-        if episode % 1000 == 0:
+        '''if episode % 1000 == 0:
             print("Episode : ", episode)
             print(Q[43, env.translate(env.initial_pedestrian_2_position), env.translate(env.initial_pedestrian_1_position)])
         # print(Q[43, 45, 31])
         # print(infoQ[43, 45, 31])
             valpha.append(alpha)
             vepsilon.append(current_eps)
-            verror0.append(Q[43, 38, 31][0][0])
-            verror1.append(Q[43, 38, 31][0][1])
-            verror2.append(Q[43, 38, 31][0][2])
+            verror0.append(Q[43, 45, 31][0][0])
+            verror1.append(Q[43, 45, 31][0][1])
+            verror2.append(Q[43, 45, 31][0][2])'''
 
         step_count = 0
 
@@ -256,7 +257,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     policy, V = deterministic_optimal_policy_calculator(Q, env, weights)
 
     # Plot the information gathered:
-
+    '''
     plt.figure(1)
     plt.subplot(2, 1, 1)
     plt.plot(np.arange(len(valpha)), valpha, label="Alpha")
@@ -275,7 +276,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     plt.subplot(3, 1, 3)
     plt.plot(np.arange(len(verror2)), verror2, label="2")
     plt.legend()
-    plt.show()
+    plt.show()'''
 
 
     # np_graphics = np.array(for_graphics)
@@ -349,7 +350,6 @@ class QLearner:
 
 
 def main():
-    env = Environment(is_deterministic=True)
     max_weights = 15000
     print("-------------------")
     print("L(earning) Agent will learn now using Q-Learning in the Public Civility Game.")
@@ -358,10 +358,11 @@ def main():
 
     # Parameters to change in each run
     alpha = 0.8
-    weights = [1.0, 0.0, 0.0]
-    lexicographic_order = "unethical1"
+    weights = [1.0, 1.898, 18.062]
+    lexicographic_order = "120"
+    env = Environment(is_deterministic=True)
     env.initial_pedestrian_1_position = env.translate_state_cell(31)
-    env.initial_pedestrian_2_position = env.translate_state_cell(38)
+    env.initial_pedestrian_2_position = env.translate_state_cell(45)
     max_episodes = 70000
     save = True
 
@@ -371,11 +372,11 @@ def main():
     print("The Learnt Policy has the following Value for alpha = ", alpha, " is:")
 
     if save:
-        np.save("./Policies_38_31/policy_lex" + lexicographic_order + ".npy", policy)  # changepo
+        np.save("./more_stochasticity/policy_lex" + lexicographic_order + ".npy", policy)  # changepo
 
     print("-------------------")
     print("Finnished!!!")
-    policy_value = v[43, 38, 31]
+    policy_value = v[43, 45, 31]
     print(policy_value)
 
     # env = Environment(is_deterministic=True)

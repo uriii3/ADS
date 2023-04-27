@@ -1,7 +1,7 @@
 class Norms:
 
-    NO_THROWING = -1  #Throwing garbage to other agents is forbidden
-    NO_UNCIVILITY = 0  #Being a little uncivil by not throwing garbage to trashcan is permitted (NOT IMPLEMENTED)
+    NO_THROWING = -1  # Throwing garbage to other agents is forbidden
+    NO_UNCIVILITY = 0  # Being a little uncivil by not throwing garbage to trashcan is permitted (NOT IMPLEMENTED)
 
 
 class Values:
@@ -12,7 +12,7 @@ class Values:
     SAFETY_EXTERNAL_INJURY_MULTIPLIER = 0.3
     SAFETY_EXTERNAL_LETHAL_MULTIPLIER = 1.0
 
-    TO_TRASHCAN = 1 #Throwing garbage to trashcan is praiseworthy
+    TO_TRASHCAN = 1 # Throwing garbage to trashcan is praiseworthy
 
 
 class ProblemName:
@@ -20,3 +20,4 @@ class ProblemName:
     isEasyEnv = False
     isNormalEnv = False
     isHardEnv = True
+    isMoreStochastic = False

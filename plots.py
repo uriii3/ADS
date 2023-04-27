@@ -31,7 +31,7 @@ def plotting(environment, policies_to_compare, initial_state):
     vpolicies = []
     n_unethical_policies = 2
 
-    root = './Policies_' + initial_state + '/'
+    root = './' + initial_state + '/'
     # We save all policies we will compare inside the vector:
     if policies_to_compare[len(policies_to_compare)-1] == "unethical":
         unethical = True
@@ -48,7 +48,7 @@ def plotting(environment, policies_to_compare, initial_state):
     n_peatons_run = np.zeros(n_policies, dtype=object)
     n_dangerous_driving = np.zeros(n_policies, dtype=object)
     n_bumps_coll = np.zeros(n_policies, dtype=object)
-    v_steps = np.zeros((n_policies, 15))
+    v_steps = np.zeros((n_policies, 20))
     v_peatons_run = np.zeros((n_policies, 4))
     v_dangerous_driving = np.zeros((n_policies, 4))
     v_bumps_coll = np.zeros((n_policies, 5))
@@ -155,22 +155,22 @@ def plotting(environment, policies_to_compare, initial_state):
 
 
 def main():
-    initial_state = "38_31"
+    initial_state = "more_stochasticity" # Policies_38_31 or more_stochasticity
 
     policies_to_compare = [
         "210",
         "120",
         "102",
-        "201",
-        "012",
-        "021",
-        "unethical"
+        #"201",
+        #"012",
+        #"021",
+        #"unethical"
     ]
 
     # Initialize the environment:
     env = Environment(is_deterministic=True) # he d'anar amb compte amb això!!
     env.initial_pedestrian_1_position = env.translate_state_cell(31)
-    env.initial_pedestrian_2_position = env.translate_state_cell(38)
+    env.initial_pedestrian_2_position = env.translate_state_cell(45)
     print()
     print("-----------------------------------")
     print("Starting simulations!")

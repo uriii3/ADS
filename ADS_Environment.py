@@ -2,6 +2,7 @@ import numpy as np
 from ItemAndAgent import Item, Agent
 from ValuesNorms import Values, Norms, ProblemName
 from window import Window
+import ValuesNorms
 
 """
 
@@ -74,7 +75,7 @@ class Environment:
 
     initial_agent_left_position = [6, 1] #-> 43
     initial_pedestrian_1_position = [4, 3] #-> 31
-    initial_pedestrian_2_position = [5, 3] #-> 38
+    initial_pedestrian_2_position = [6, 3] #-> 38
 
     agent_left_goal = [1, 6]
     agent_right_goal = [2, 6]
@@ -93,7 +94,7 @@ class Environment:
 
     individual_objective = 0
 
-    def __init__(self, garbage_pos=-1, is_deterministic=True, seed=-1, who_is_the_learning_agent=0):
+    def __init__(self, garbage_pos=-1, is_deterministic=True, seed=-1, who_is_the_learning_agent=0, more_stochastic = False):
         self.seed = seed
         self.name = 'Envious'
         self.initial_garbage_position = garbage_pos
@@ -148,6 +149,8 @@ class Environment:
 
         self.n_fatalities = 0
         self.n_injuries = 0
+
+        ValuesNorms.ProblemName.isMoreStochastic = more_stochastic
 
     def set_states_for_VI(self):
 
