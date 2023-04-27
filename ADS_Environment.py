@@ -88,8 +88,6 @@ class Environment:
     n_garbage_states = 0
     n_pedestrian_states = 0
 
-    pedestrian_move_map = Agent.move_map
-
     NB_AGENTS = 1
 
     individual_objective = 0
@@ -149,6 +147,8 @@ class Environment:
 
         self.n_fatalities = 0
         self.n_injuries = 0
+
+        self.pedestrian_move_map = Agent.move_map
 
         ValuesNorms.ProblemName.isMoreStochastic = more_stochastic
 
