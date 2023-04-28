@@ -84,10 +84,12 @@ class QLearner:
 
 if __name__ == "__main__":
 
-    policy = np.load('more_stochasticity/policy_lex012.npy')
+    policy = np.load('Policies_38_31/policy_lex102.npy')
 
-    env = Environment(is_deterministic=True, more_stochastic=True)
-    env.initial_pedestrian_2_position = env.translate_state_cell(45)
+    initial_pedestrian_1_cell = 31
+    initial_pedestrian_2_cell = 38
+    isMoreStochastic = False
+    env = Environment(is_deterministic=True, isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell = initial_pedestrian_1_cell, initial_pedestrian_2_cell = initial_pedestrian_2_cell)
 
     print()
     print("-----------------------------------")

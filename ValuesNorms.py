@@ -20,4 +20,3 @@ class ProblemName:
     isEasyEnv = False
     isNormalEnv = False
     isHardEnv = True
-    isMoreStochastic = False

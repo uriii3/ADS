@@ -49,7 +49,7 @@ def to_color(nb):
         return 128, 128, 128
     elif nb == 1: # Inaccessible
         return 0, 0, 0
-    elif nb == 4: # Everyone cell (paso de cebra)
+    elif nb == 4: # Everyone cell (pas de zebra)
         return 0, 0, 128
     elif nb == 2000: # Goal left
         return 128, 128, 128

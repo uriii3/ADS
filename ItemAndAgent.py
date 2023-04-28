@@ -105,7 +105,7 @@ class Item:
 
 class Agent(Item):
     """
-    Agent inherits from its parent  Item, but now it can also perform actions.
+    Agent inherits from its parent item, but now it can also perform actions.
     """
 
     RIGHT = 0
@@ -119,30 +119,8 @@ class Agent(Item):
     DOWN = 7 # Secret action only for pedestrian
     NULL = -3534
     NB_ACTIONS = 6
-    initial_agent_left_position = [6, 1]
-    initial_agent_right_position = [4, 3]
-    initial_pedestrian_2_position = [6, 3]
 
-    move_map = [
-        [[DOWN], [LEFT], [LEFT], [LEFT],[NULL], [NULL]],
-        [[DOWN], [NULL], [NULL], [UP],  [NULL], [NULL]],
-        [[DOWN], [NULL], [NULL], [UP],  [NULL], [NULL]],
-        [[DOWN], [LEFT], [LEFT], [LEFT],[NULL], [NULL]],
-        [[DOWN], [NULL], [NULL], [UP],  [NULL], [NULL]],
-        [[DOWN], [NULL], [NULL], [UP],  [NULL], [NULL]],
-        [[DOWN], [NULL], [NULL], [UP],  [NULL], [NULL]],
-        [[RIGHT],[RIGHT],[RIGHT],[UP],  [NULL], [NULL]],
-        [[NULL], [NULL], [NULL], [NULL],[NULL], [NULL]]
-    ]
-
-    if not ProblemName.isEasyEnv:
-        move_map[3][3] = [LEFT, UP]
-    if ProblemName.isHardEnv:
-        move_map[5][3] = [UP, RIGHT]
-    if ValuesNorms.ProblemName.isMoreStochastic:
-        move_map[3][3] = [LEFT, UP, RIGHT]
-
-    def __init__(self, name, pos, goal, mat, car):
+    def __init__(self, name, pos, goal, mat, car, isMoreStochastic):
         Item.__init__(self, name, pos)
         self.map = mat
 
@@ -154,6 +132,25 @@ class Agent(Item):
         self.being_civic = False
         self.current_damage = 0
         self.previous_action = -999
+
+        self.move_map = [
+            [[Agent.DOWN], [Agent.LEFT], [Agent.LEFT], [Agent.LEFT], [Agent.NULL], [Agent.NULL]],
+            [[Agent.DOWN], [Agent.NULL], [Agent.NULL], [Agent.UP], [Agent.NULL], [Agent.NULL]],
+            [[Agent.DOWN], [Agent.NULL], [Agent.NULL], [Agent.UP], [Agent.NULL], [Agent.NULL]],
+            [[Agent.DOWN], [Agent.LEFT], [Agent.LEFT], [Agent.LEFT], [Agent.NULL], [Agent.NULL]],
+            [[Agent.DOWN], [Agent.NULL], [Agent.NULL], [Agent.UP], [Agent.NULL], [Agent.NULL]],
+            [[Agent.DOWN], [Agent.NULL], [Agent.NULL], [Agent.UP], [Agent.NULL], [Agent.NULL]],
+            [[Agent.DOWN], [Agent.NULL], [Agent.NULL], [Agent.UP], [Agent.NULL], [Agent.NULL]],
+            [[Agent.RIGHT], [Agent.RIGHT], [Agent.RIGHT], [Agent.RIGHT], [Agent.NULL], [Agent.NULL]],
+            [[Agent.NULL], [Agent.NULL], [Agent.NULL], [Agent.NULL], [Agent.NULL], [Agent.NULL]]
+        ]
+
+        if not ProblemName.isEasyEnv:
+            self.move_map[3][3] = [Agent.LEFT, Agent.UP]
+        if ProblemName.isHardEnv:
+            self.move_map[5][3] = [Agent.UP, Agent.RIGHT]
+        if isMoreStochastic:
+            self.move_map[3][3] = [Agent.LEFT, Agent.UP, Agent.RIGHT]
 
     def set_map(self, mat):
         self.map = mat
@@ -219,7 +216,7 @@ class Agent(Item):
         :return: a move request.
         """
 
-        direction_chosen = Agent.move_map[self.position[0]][self.position[1]]
+        direction_chosen = self.move_map[self.position[0]][self.position[1]]
 
         which_one = np.random.randint(len(direction_chosen))
         return self.move_request(direction_chosen[which_one])

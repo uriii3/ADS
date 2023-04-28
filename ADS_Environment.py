@@ -73,10 +73,6 @@ class Environment:
     PC = 3 # PEDESTRIAN CELL (only for pedestrian)
     EC = 4 # EVERYONE CELL (for everyone)
 
-    initial_agent_left_position = [6, 1] #-> 43
-    initial_pedestrian_1_position = [4, 3] #-> 31
-    initial_pedestrian_2_position = [6, 3] #-> 38
-
     agent_left_goal = [1, 6]
     agent_right_goal = [2, 6]
 
@@ -92,10 +88,12 @@ class Environment:
 
     individual_objective = 0
 
-    def __init__(self, garbage_pos=-1, is_deterministic=True, seed=-1, who_is_the_learning_agent=0, more_stochastic = False):
+    def __init__(self,garbage_pos=-1, is_deterministic=True, seed=-1, who_is_the_learning_agent=0, isMoreStochastic = False, initial_pedestrian_1_cell = 31, initial_pedestrian_2_cell = 45, initial_car_cell = 43):
         self.seed = seed
         self.name = 'Envious'
         self.initial_garbage_position = garbage_pos
+
+        self.isMoreStochastic = isMoreStochastic
 
         self.waste_basket = [1, 0]
         self.waste_basket2 = [1, 3]
@@ -110,6 +108,10 @@ class Environment:
         self.map_length = self.map_tileset.shape[0]
         self.map_width = self.map_tileset.shape[1]
         self.map_num_cells = self.map_length*self.map_width
+
+        self.initial_agent_left_position = self.translate_state_cell(initial_car_cell)  # -> 43
+        self.initial_pedestrian_1_position = self.translate_state_cell(initial_pedestrian_1_cell)  # -> 31
+        self.initial_pedestrian_2_position = self.translate_state_cell(initial_pedestrian_2_cell)
 
         #print(self.map_width, self.map_length)
 
@@ -148,15 +150,14 @@ class Environment:
         self.n_fatalities = 0
         self.n_injuries = 0
 
-        self.pedestrian_move_map = Agent.move_map
+        #self.pedestrian_move_map = Agent.move_map
 
-        ValuesNorms.ProblemName.isMoreStochastic = more_stochastic
 
     def set_states_for_VI(self):
 
-
         for i in range(len(self.map_tileset)):
             for j in range(len(self.map_tileset[0])):
+
                 if self.map_tileset[i][j] == Environment.PC or self.map_tileset[i][j] == Environment.EC:
                     self.states_agent_right.append(self.translate([i, j]))
                 if self.map_tileset[i][j] == Environment.AC or self.map_tileset[i][j] == Environment.EC:
@@ -187,16 +188,15 @@ class Environment:
         if kind == 'Item':
             item = Item(name, position)
         elif kind == 'Pedestrian':
-            item = Agent(name, position, goal, self.map_clone(), False)
+            item = Agent(name, position, goal, self.map_clone(), False, self.isMoreStochastic)
         else:
-            item = Agent(name, position, goal, self.map_clone(), True)
+            item = Agent(name, position, goal, self.map_clone(), True, self.isMoreStochastic)
 
         self.map[position[0], position[1]].appendate(item)
 
         return item
 
-    def generate_agents(self, where_left=initial_agent_left_position, where_right=initial_pedestrian_1_position, where_p2=initial_pedestrian_2_position, where_goal_left=agent_left_goal, where_goal_right=agent_right_goal):
-
+    def generate_agents(self, where_left=[6, 1], where_right=[4, 3], where_p2=[6, 3], where_goal_left=agent_left_goal, where_goal_right=agent_right_goal):
 
         agents = list()
         agents.append(self.generate_item('Agent', 8005, where_left, where_goal_left))
@@ -225,7 +225,7 @@ class Environment:
 
         return items
 
-    def reset(self, mode='soft', where_left=initial_agent_left_position, where_right = initial_pedestrian_1_position, where_ped2 = initial_pedestrian_2_position, where_garbage=-1):
+    def reset(self, mode='soft', where_left=[6, 1], where_right = [4, 3], where_ped2 = [6, 3], where_garbage=-1):
         """
         Returns the game to its original state, before the player or another agent have changed anything.
         :return:
@@ -233,32 +233,31 @@ class Environment:
         if where_garbage == -1:
             where_garbage = self.initial_garbage_position
 
-
         self.map = self.create_cells()
         self.items = self.generate_items(mode, where_garbage)
-        self.agents = self.generate_agents(where_left, where_right, where_ped2)
+        self.agents = self.generate_agents(self.initial_agent_left_position, self.initial_pedestrian_1_position, self.initial_pedestrian_2_position)
 
         if mode == 'hard':
             self.garbage_in_basket = False
 
-    def easy_reset(self, where_left=initial_agent_left_position, where_right = initial_pedestrian_1_position, where_p2 = initial_pedestrian_2_position):
+    def easy_reset(self, where_left=[6, 1], where_right = [4, 3], where_p2 = [6, 3]):
 
-        move = self.agents[0].move_request(0, i_insist=where_left)
+        move = self.agents[0].move_request(0, i_insist=self.initial_agent_left_position)
         hum1 = self.do_move_or_not(move)
 
-        move = self.agents[1].move_request(0, i_insist=where_right)
+        move = self.agents[1].move_request(0, i_insist=self.initial_pedestrian_1_position)
         hum2 = self.do_move_or_not(move)
 
-        move = self.agents[2].move_request(0, i_insist=where_p2)
+        move = self.agents[2].move_request(0, i_insist=self.initial_pedestrian_2_position)
         hum3 = self.do_move_or_not(move)
 
 
-    def hard_reset(self, where_left=initial_agent_left_position, where_right = initial_pedestrian_1_position, where_p2 = initial_pedestrian_2_position, where_garbage=-1):
+    def hard_reset(self, where_left=[6, 1], where_p1 = [4, 3], where_p2 = [6, 3], where_garbage=-1):
         """
         Returns the game to its original state, before the player or another agent have changed anything.
         :return:
         """
-        self.reset('hard', where_left, where_right, where_p2, where_garbage)
+        self.reset('hard', self.initial_agent_left_position, self.initial_pedestrian_1_position, self.initial_pedestrian_2_position, where_garbage)
 
     def approve_move(self, move):
         """
@@ -388,6 +387,7 @@ class Environment:
         :param actions: the player's action
         :return:
         """
+        kill = [[True, 0, 0]]
         for agent in self.agents:
             agent.set_map(self.map_clone())
 
@@ -415,6 +415,8 @@ class Environment:
                 if move_requests[0].get_destination() == move_requests[i].get_destination():
                     external_damage += Values.SAFETY_EXTERNAL_LETHAL_MULTIPLIER
                     self.n_fatalities += 1
+                    # kill the pedestrian
+                    kill.append([True, move_requests[i].get_destination(), self.agents[i]])
                 # If the car goes to where the person was (INJURY NOT LETHAL)
                 elif move_requests[0].get_destination() == move_requests[i].get_origin():
                     external_damage += Values.SAFETY_EXTERNAL_INJURY_MULTIPLIER
@@ -425,18 +427,25 @@ class Environment:
                     if move_requests[0].get_in_between() == move_requests[i].get_destination():
                         external_damage += Values.SAFETY_EXTERNAL_LETHAL_MULTIPLIER
                         self.n_fatalities += 1
+                        # kill the pedestrian
+                        print("hola")
+                        kill.append([True, move_requests[i].get_destination(), self.agents[i]])
                     # If the car traverses where the person was (INJURY NOT LETHAL)
                     elif move_requests[0].get_in_between() == move_requests[i].get_origin():
                         external_damage += Values.SAFETY_EXTERNAL_INJURY_MULTIPLIER
                         self.n_injuries += 1
 
         ##### Order checking finished here
-
+        kill.append([False, 0, 0])
         for i in range(len(move_requests)):
             move_request = move_requests[i]
             move_approved = self.do_move_or_not(move_request)
             if move_approved and i == 0:
                 self.external_damage = external_damage
+            i = 1
+            while kill[i][0] == True:
+                self.to_ran_over(kill[i][1], kill[i][2])
+                i += 1
 
 
     def remove_from_cell(self, pos, item):
@@ -444,6 +453,11 @@ class Environment:
 
     def put_in_cell(self, pos, item):
         self.map[pos[0]][pos[1]].appendate(item)
+
+    def to_ran_over(self, pos, item):
+        self.remove_from_cell(pos, item)
+        self.put_in_cell([7, 3], item)
+        item.move([7, 3])
 
 
     def to_reward(self, agent, action):
