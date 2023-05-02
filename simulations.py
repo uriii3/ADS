@@ -89,7 +89,7 @@ if __name__ == "__main__":
     initial_pedestrian_1_cell = 31
     initial_pedestrian_2_cell = 38
     isMoreStochastic = False
-    env = Environment(is_deterministic=True, isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell = initial_pedestrian_1_cell, initial_pedestrian_2_cell = initial_pedestrian_2_cell)
+    env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell = initial_pedestrian_1_cell, initial_pedestrian_2_cell = initial_pedestrian_2_cell)
 
     print()
     print("-----------------------------------")

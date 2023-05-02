@@ -76,7 +76,7 @@ class Window:
 
         self.width = 640
         self.height = 640
-        self.map, self.player, self.waste_basket, self.waste_basket2, self.goal, self.goal2 = info
+        self.map, self.player, self.goal, self.goal2 = info
 
 
         self.map[self.goal[0], self.goal[1]] = 2000
