@@ -49,7 +49,7 @@ def to_color(nb):
         return 128, 128, 128
     elif nb == 1: # Inaccessible
         return 0, 0, 0
-    elif nb == 4: # Everyone cell (paso de cebra)
+    elif nb == 4: # Everyone cell (pas de zebra)
         return 0, 0, 128
     elif nb == 2000: # Goal left
         return 128, 128, 128
@@ -76,7 +76,7 @@ class Window:
 
         self.width = 640
         self.height = 640
-        self.map, self.player, self.waste_basket, self.waste_basket2, self.goal, self.goal2 = info
+        self.map, self.player, self.goal, self.goal2 = info
 
 
         self.map[self.goal[0], self.goal[1]] = 2000

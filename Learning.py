@@ -360,9 +360,11 @@ def main():
     alpha = 0.8
     weights = [1.0, 1.898, 18.062]
     lexicographic_order = "120"
-    env = Environment(is_deterministic=True)
-    env.initial_pedestrian_1_position = env.translate_state_cell(31)
-    env.initial_pedestrian_2_position = env.translate_state_cell(45)
+    initial_pedestrian_1_cell = 31
+    initial_pedestrian_2_cell = 38
+    isMoreStochastic = False
+    env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
+                      initial_pedestrian_2_cell=initial_pedestrian_2_cell)
     max_episodes = 70000
     save = True
 
