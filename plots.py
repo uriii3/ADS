@@ -68,7 +68,7 @@ def plotting(environment, policies_to_compare, initial_state):
             int_peatons_run = 0
             int_dangerous_driving = 0
             int_bumps_coll = 0
-            environment.hard_reset()
+            environment.hard_reset(env.initial_agent_left_position, env.initial_pedestrian_1_position, env.initial_pedestrian_2_position)
             state = environment.get_state()
             done = False
 

@@ -18,7 +18,6 @@ def Q_function_calculator(env, state, V, discount_factor, model_used=None):
     state_translated = env.translate_state(state)
     hulls = list()
     agent_2_actions = env.agents[1].move_map
-    print(agent_2_actions)
     action2 = agent_2_actions[state_translated[1][0]][state_translated[1][1]]
     action3 = agent_2_actions[state_translated[2][0]][state_translated[2][1]]
 

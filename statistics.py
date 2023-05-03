@@ -25,7 +25,7 @@ def example_execution(env, policy, render=False, stop=False):
     for i in range(number_of_simulations):
         # Initialize environment
         timestep = 0
-        env.hard_reset()
+        env.hard_reset(env.initial_agent_left_position, env.initial_pedestrian_1_position, env.initial_pedestrian_2_position)
         state = env.get_state()
         done = False
 

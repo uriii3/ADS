@@ -429,8 +429,8 @@ class Environment:
 
     def to_ran_over(self, pos, item):
         self.remove_from_cell(pos, item)
-        self.put_in_cell([7, 3], item)
-        item.move([7, 3])
+        self.put_in_cell([7, 4], item)
+        item.move([7, 4])
 
 
     def to_reward(self, agent, action):
