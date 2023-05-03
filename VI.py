@@ -2,8 +2,6 @@ import numpy as np
 from ADS_Environment import Environment
 import gc
 
-agent_2_actions = Environment.pedestrian_move_map
-
 def translate_action(action):
     """
     Specific to the public civility game environmment, translates what each action number means
@@ -77,6 +75,7 @@ def Q_function_calculator(env, state, V, discount_factor, model_used=None):
     """
     Q_state = np.zeros((env.n_actions, env.n_objectives))
     state_translated = env.translate_state(state)
+    agent_2_actions = env.agents[1].move_map
     action2 = agent_2_actions[state_translated[1][0]][state_translated[1][1]]
     action3 = agent_2_actions[state_translated[2][0]][state_translated[2][1]]
 
@@ -92,6 +91,7 @@ def Q_function_calculator(env, state, V, discount_factor, model_used=None):
                     rewards = all_things[:3]
                 else:
                     env.easy_reset(state_translated[0], state_translated[1], state_translated[2])
+
                     next_state, rewards, _ = env.step([action, act2, act3])
 
                 for objective in range(len(rewards)):
@@ -288,9 +288,7 @@ if __name__ == "__main__":
     print("The Ethical Weight of the Scalarisation Function is set to W_E = " + str(w_E) + ", found by our Algorithm.")
     print("-------------------")
     print("Learning Process started. Will finish when Delta < Theta.")
-    weights = [1.0, 0.253, 0.02]
-    env.initial_pedestrian_1_position = env.translate_state_cell(31)
-    env.initial_pedestrian_2_position = env.translate_state_cell(38)
+    weights = [1.0, 1.0, 1.0]
     #weights = [1.0, w_E, w_E]
 
     #generate_model(env)

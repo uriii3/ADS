@@ -3,10 +3,6 @@ import convexhull
 from ADS_Environment import Environment
 import pickle
 
-agent_2_actions = Environment.pedestrian_move_map
-
-
-
 def Q_function_calculator(env, state, V, discount_factor, model_used=None):
     """
 
@@ -19,12 +15,12 @@ def Q_function_calculator(env, state, V, discount_factor, model_used=None):
     :param discount_factor: discount factor considered, a real number
     :return: the new convex obtained after checking for each action (this is the operation hull of unions)
     """
-
     state_translated = env.translate_state(state)
     hulls = list()
+    agent_2_actions = env.agents[1].move_map
+    print(agent_2_actions)
     action2 = agent_2_actions[state_translated[1][0]][state_translated[1][1]]
     action3 = agent_2_actions[state_translated[2][0]][state_translated[2][1]]
-
 
     dividing_factor = float(1./(len(action2)*len(action3)))
     for action in range(env.n_actions):
@@ -39,7 +35,6 @@ def Q_function_calculator(env, state, V, discount_factor, model_used=None):
 
                     next_state = [int(all_things[i]) for i in range(3,6)]
                     rewards = all_things[:3]
-
 
                 else:
                     env.easy_reset(state_translated[0], state_translated[1], state_translated[2])
@@ -100,7 +95,7 @@ def partial_convex_hull_value_iteration(env, discount_factor=1.0, max_iterations
 
 
 def learn_and_do():
-    env = Environment()
+    env = Environment(isMoreStochastic=False, initial_pedestrian_1_cell = 31, initial_pedestrian_2_cell = 45)
     v = partial_convex_hull_value_iteration(env, model_used=None)
     with open(r"v_function.pickle", "wb") as output_file:
         pickle.dump(v, output_file)

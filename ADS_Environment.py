@@ -114,8 +114,6 @@ class Environment:
         self.terminal_state_agent_pos2 = self.translate(Environment.agent_goal_2)
 
         #print(self.terminal_state_agent_pos1, self.terminal_state_agent_pos2)
-        self.states_agent_left = list()
-        self.states_agent_right = list()
 
         self.set_states_for_VI()
 
@@ -217,17 +215,17 @@ class Environment:
 
         self.map = self.create_cells()
         self.items = self.generate_items(mode)
-        self.agents = self.generate_agents(self.initial_agent_left_position, self.initial_pedestrian_1_position, self.initial_pedestrian_2_position)
+        self.agents = self.generate_agents(where_left, where_right, where_ped2)
 
     def easy_reset(self, where_left=[6, 1], where_right = [4, 3], where_p2 = [6, 3]):
 
-        move = self.agents[0].move_request(0, i_insist=self.initial_agent_left_position)
+        move = self.agents[0].move_request(0, i_insist=where_left)
         hum1 = self.do_move_or_not(move)
 
-        move = self.agents[1].move_request(0, i_insist=self.initial_pedestrian_1_position)
+        move = self.agents[1].move_request(0, i_insist=where_right)
         hum2 = self.do_move_or_not(move)
 
-        move = self.agents[2].move_request(0, i_insist=self.initial_pedestrian_2_position)
+        move = self.agents[2].move_request(0, i_insist=where_p2)
         hum3 = self.do_move_or_not(move)
 
 
@@ -236,7 +234,7 @@ class Environment:
         Returns the game to its original state, before the player or another agent have changed anything.
         :return:
         """
-        self.reset('hard', self.initial_agent_left_position, self.initial_pedestrian_1_position, self.initial_pedestrian_2_position)
+        self.reset('hard', where_left, where_p1, where_p2)
 
     def approve_move(self, move):
         """
