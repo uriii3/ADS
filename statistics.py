@@ -95,7 +95,7 @@ class QLearner:
 
 
 def main():
-    policy = np.load('Policies_45_31/policy_lex201.npy')
+    policy = np.load('Policies_old/Policies_45_31/policy_lex201.npy')
 
     env = Environment(is_deterministic=True)
     print()
