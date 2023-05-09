@@ -231,9 +231,6 @@ def value_iteration(env, weights, theta=1.0, discount_factor=0.7, model_used=Non
 
 
     # Output a deterministic optimal policy
-    print(env.isMoreStochastic)
-    print(env.initial_pedestrian_1_position)
-    print(env.initial_pedestrian_2_position)
     env = Environment(isMoreStochastic=env.isMoreStochastic, initial_pedestrian_1_cell=env.translate(env.initial_pedestrian_1_position),
                       initial_pedestrian_2_cell=env.translate(env.initial_pedestrian_2_position))
 
@@ -255,9 +252,6 @@ def example_execution(policy, q):
     env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
                       initial_pedestrian_2_cell=initial_pedestrian_2_cell)
 
-    print(env.isMoreStochastic)
-    print(env.initial_pedestrian_1_position)
-    print(env.initial_pedestrian_2_position)
     state = env.get_state()
 
     done = False
@@ -305,7 +299,7 @@ if __name__ == "__main__":
     print("The Ethical Weight of the Scalarisation Function is set to W_E = " + str(w_E) + ", found by our Algorithm.")
     print("-------------------")
     print("Learning Process started. Will finish when Delta < Theta.")
-    weights = [1.0, 0.21282666666666666, 0.0005333333333333486]
+    weights = [1.0, 0.21282666666666664, 0.0005333333333332746]
     #weights = [1.0, w_E, w_E]
 
     #generate_model(env)
@@ -320,8 +314,6 @@ if __name__ == "__main__":
     person = 38
     person2 = 31
     print(v[car][person][person2])
-
-    print("holaaaa")
 
     print("-------------------")
     print("We Proceed to show the learnt policy. Please use the image PCG_positions.png provided to identify the agent and garbage positions:")

@@ -10,10 +10,10 @@ isMoreStochastic = False
 env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
                   initial_pedestrian_2_cell=initial_pedestrian_2_cell)
 initial_states = [[43, initial_pedestrian_2_cell, initial_pedestrian_1_cell]]
-epsilon = 0.01
+epsilon = 0.062
 w_E = [0, 0, 0]
 while w_E != [None, None, None]:
-    epsilon += 0.01
+    epsilon += 0.0001
     discount_factor = 1.0
     max_iterations = 15
 
