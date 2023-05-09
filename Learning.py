@@ -181,12 +181,12 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     # eps_reduc = epsilon / max_episodes  # per trobar les accions (exploration vs exploitation)
     infoQ = np.zeros([n_cells, n_cells, n_cells])
     # alpha_reduc = 0.5 * alpha / max_episodes  # pel pas de cada correcció
-    '''
+    #'''
     valpha = []
     vepsilon = []
     verror0 = []
     verror1 = []
-    verror2 = []'''
+    verror2 = []#'''
 
     # current_alpha = 0.5
     current_eps = 0.3
@@ -195,20 +195,21 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     for episode in range(1, max_episodes + 1):
         done = False
 
-        env.easy_reset()  # comencem de 0
+        env.easy_reset(env.initial_agent_left_position, env.initial_pedestrian_1_position, env.initial_pedestrian_2_position)
 
         state = env.get_state()
 
-        '''if episode % 1000 == 0:
+        #'''
+        if episode % 1000 == 0:
             print("Episode : ", episode)
             print(Q[43, env.translate(env.initial_pedestrian_2_position), env.translate(env.initial_pedestrian_1_position)])
         # print(Q[43, 45, 31])
         # print(infoQ[43, 45, 31])
             valpha.append(alpha)
             vepsilon.append(current_eps)
-            verror0.append(Q[43, 45, 31][0][0])
-            verror1.append(Q[43, 45, 31][0][1])
-            verror2.append(Q[43, 45, 31][0][2])'''
+            verror0.append(Q[43, 38, 31][0][0])
+            verror1.append(Q[43, 38, 31][0][1])
+            verror2.append(Q[43, 38, 31][0][2])#'''
 
         step_count = 0
 
@@ -225,11 +226,13 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
             #current_max = 0.1
 
-            if episode > 40000:# 2
+            if episode > 40000:
+                alpha = 0.4
+            if episode > 60000:# 2
                 alpha = 0.2
-            elif episode > 60000:# 3
+            if episode > 70000:# 3
                 alpha = 0.1
-            elif episode > 70000:# 4
+            if episode > 80000:# 4
                 alpha = 0.05
 
             # current_alpha = max(current_max, alpha - (0.0001 * infoQ[state[0]][state[1]][state[2]]))
@@ -257,7 +260,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     policy, V = deterministic_optimal_policy_calculator(Q, env, weights)
 
     # Plot the information gathered:
-    '''
+    #'''
     plt.figure(1)
     plt.subplot(2, 1, 1)
     plt.plot(np.arange(len(valpha)), valpha, label="Alpha")
@@ -276,7 +279,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     plt.subplot(3, 1, 3)
     plt.plot(np.arange(len(verror2)), verror2, label="2")
     plt.legend()
-    plt.show()'''
+    plt.show()#'''
 
 
     # np_graphics = np.array(for_graphics)
@@ -358,14 +361,14 @@ def main():
 
     # Parameters to change in each run
     alpha = 0.8
-    weights = [1.0, 1.898, 18.062]
-    lexicographic_order = "120"
+    weights = [1.0, 0.281241, 0.124964]
+    lexicographic_order = "102"
     initial_pedestrian_1_cell = 31
     initial_pedestrian_2_cell = 38
     isMoreStochastic = False
     env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
                       initial_pedestrian_2_cell=initial_pedestrian_2_cell)
-    max_episodes = 70000
+    max_episodes = 90000
     save = True
 
     # Training.
@@ -374,11 +377,11 @@ def main():
     print("The Learnt Policy has the following Value for alpha = ", alpha, " is:")
 
     if save:
-        np.save("./more_stochasticity/policy_lex" + lexicographic_order + ".npy", policy)  # changepo
+        np.save("./new_38_31/policy_lex" + lexicographic_order + ".npy", policy)  # changepo
 
     print("-------------------")
     print("Finnished!!!")
-    policy_value = v[43, 45, 31]
+    policy_value = v[43, initial_pedestrian_2_cell, 31]
     print(policy_value)
 
     # env = Environment(is_deterministic=True)

@@ -117,7 +117,7 @@ class Environment:
 
         self.set_states_for_VI()
 
-        self.agents = self.generate_agents()
+        self.agents = self.generate_agents(where_left=self.translate_state_cell(initial_car_cell), where_right=self.translate_state_cell(initial_pedestrian_1_cell), where_p2=self.translate_state_cell(initial_pedestrian_2_cell))
 
         self.items = self.generate_items(first=True)
 

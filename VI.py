@@ -231,7 +231,8 @@ def value_iteration(env, weights, theta=1.0, discount_factor=0.7, model_used=Non
 
 
     # Output a deterministic optimal policy
-    env = Environment()
+    env = Environment(isMoreStochastic=env.isMoreStochastic, initial_pedestrian_1_cell=env.translate(env.initial_pedestrian_1_position),
+                      initial_pedestrian_2_cell=env.translate(env.initial_pedestrian_2_position))
 
     policy = deterministic_optimal_policy_calculator(Q, env, weights)
 
@@ -245,7 +246,12 @@ def example_execution(policy, q):
     :param policy: a function S -> A assigning to each state the corresponding recommended action
     :return:
     """
-    env = Environment()
+    initial_pedestrian_1_cell = 31
+    initial_pedestrian_2_cell = 38
+    isMoreStochastic = False
+    env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
+                      initial_pedestrian_2_cell=initial_pedestrian_2_cell)
+
     state = env.get_state()
 
     done = False
@@ -277,7 +283,12 @@ def example_execution(policy, q):
 
 
 if __name__ == "__main__":
-    env = Environment()
+    initial_pedestrian_1_cell = 31
+    initial_pedestrian_2_cell = 38
+    isMoreStochastic = False
+    env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
+                      initial_pedestrian_2_cell=initial_pedestrian_2_cell)
+
     w_E = 0.0
 
     print("TO DO: No hace falta que todos los estados sean diferentes para los dos peatones. Si los cambias de sitio al final es lo mismo.")
@@ -288,7 +299,7 @@ if __name__ == "__main__":
     print("The Ethical Weight of the Scalarisation Function is set to W_E = " + str(w_E) + ", found by our Algorithm.")
     print("-------------------")
     print("Learning Process started. Will finish when Delta < Theta.")
-    weights = [1.0, 1.0, 1.0]
+    weights = [1.0, 0.21282666666666664, 0.0005333333333332746]
     #weights = [1.0, w_E, w_E]
 
     #generate_model(env)
@@ -303,13 +314,6 @@ if __name__ == "__main__":
     person = 38
     person2 = 31
     print(v[car][person][person2])
-
-
-    print(v[43, 45, 31])
-    print(v[44, 38, 24])
-    print(v[30, 31, 23])
-    print(v[16, 24, 22])
-    print(v[18, 21, 17])
 
     print("-------------------")
     print("We Proceed to show the learnt policy. Please use the image PCG_positions.png provided to identify the agent and garbage positions:")
