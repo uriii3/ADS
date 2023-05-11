@@ -238,17 +238,17 @@ def value_iteration(env, weights, theta=1.0, discount_factor=0.7, model_used=Non
 
     return policy, V, Q
 
-def example_execution(policy, q):
+def example_execution(policy, q, initial_pedestrian_1_cell, initial_pedestrian_2_cell, isMoreStochastic):
     """
 
     Simulation of the environment without learning. The L Agent moves according to the parameter policy provided.
 
     :param policy: a function S -> A assigning to each state the corresponding recommended action
+    :param initial_pedestrian_1_cell: Initial pedestrian 1 position
+    :param initial_pedestrian_2_cell: Initial pedestrain 2 position
+    :param isMoreStochastic: Is the environment more stochastic?
     :return:
     """
-    initial_pedestrian_1_cell = 31
-    initial_pedestrian_2_cell = 38
-    isMoreStochastic = False
     env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
                       initial_pedestrian_2_cell=initial_pedestrian_2_cell)
 
@@ -277,7 +277,7 @@ def example_execution(policy, q):
         if done:
             if not individual_objective_fulfilled:
                 individual_objective_fulfilled = True
-
+                
                 print("L Agent position: " + str(state[0]) + ".")
                 print("====Individual objective fulfilled! Agent in goal position====")
 
@@ -290,7 +290,7 @@ if __name__ == "__main__":
                       initial_pedestrian_2_cell=initial_pedestrian_2_cell)
 
     w_E = 0.0
-
+    weights = [1.0, 0.21282666666666666, 0.0005333333333333486]
     print("TO DO: No hace falta que todos los estados sean diferentes para los dos peatones. Si los cambias de sitio al final es lo mismo.")
     print("Y tambien ayudaria en temas de velocidad tener un model.npy")
 
@@ -299,7 +299,7 @@ if __name__ == "__main__":
     print("The Ethical Weight of the Scalarisation Function is set to W_E = " + str(w_E) + ", found by our Algorithm.")
     print("-------------------")
     print("Learning Process started. Will finish when Delta < Theta.")
-    weights = [1.0, 0.21282666666666664, 0.0005333333333332746]
+
     #weights = [1.0, w_E, w_E]
 
     #generate_model(env)
@@ -319,7 +319,13 @@ if __name__ == "__main__":
     print("We Proceed to show the learnt policy. Please use the image PCG_positions.png provided to identify the agent and garbage positions:")
     print()
 
-    example_execution(policy, q)
+    example_execution(policy, q, initial_pedestrian_1_cell, initial_pedestrian_2_cell, isMoreStochastic)
+
+    print("-------------------")
+    example_execution(policy, q, initial_pedestrian_1_cell, initial_pedestrian_2_cell, isMoreStochastic)
+
+    print("-------------------")
+    example_execution(policy, q, initial_pedestrian_1_cell, initial_pedestrian_2_cell, isMoreStochastic)
 
     print("-------------------")
 

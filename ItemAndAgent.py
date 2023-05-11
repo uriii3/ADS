@@ -141,7 +141,7 @@ class Agent(Item):
             [[Agent.DOWN], [Agent.NULL], [Agent.NULL], [Agent.UP], [Agent.NULL], [Agent.NULL]],
             [[Agent.DOWN], [Agent.NULL], [Agent.NULL], [Agent.UP], [Agent.NULL], [Agent.NULL]],
             [[Agent.DOWN], [Agent.NULL], [Agent.NULL], [Agent.UP], [Agent.NULL], [Agent.NULL]],
-            [[Agent.RIGHT], [Agent.RIGHT], [Agent.RIGHT], [Agent.RIGHT], [Agent.NULL], [Agent.NULL]],
+            [[Agent.RIGHT], [Agent.RIGHT], [Agent.RIGHT], [Agent.UP], [Agent.UP], [Agent.NULL]],
             [[Agent.NULL], [Agent.NULL], [Agent.NULL], [Agent.NULL], [Agent.NULL], [Agent.NULL]]
         ]
 

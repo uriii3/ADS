@@ -1,16 +1,15 @@
 from Main import Ethical_Environment_Designer
-import numpy as np
 
 from ADS_Environment import Environment
 
 lex_ordering = [1, 0, 2]  # order the correct values!!
 initial_pedestrian_1_cell = 31
 initial_pedestrian_2_cell = 38
-isMoreStochastic = False
+isMoreStochastic = False # remember to change the file you are grabbing from Main.py!!
 env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
                   initial_pedestrian_2_cell=initial_pedestrian_2_cell)
 initial_states = [[43, initial_pedestrian_2_cell, initial_pedestrian_1_cell]]
-epsilon = 0.062
+epsilon = 0.0622
 w_E = [0, 0, 0]
 while w_E != [None, None, None]:
     epsilon += 0.0001

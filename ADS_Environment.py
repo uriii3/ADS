@@ -272,14 +272,14 @@ class Environment:
                     if moved.get_map()[destiny[0], destiny[1]].there_is_an_agent() or dest.there_is_an_agent():
                         pass
                     # Agent damaged with garbage
-                    elif not dest.is_free():
+                    elif not dest.is_free() and moved.car:
                         self.internal_damage = True
 
                     if fast:
                         if moved.get_map()[in_between[0], in_between[1]].there_is_an_agent() or mid.there_is_an_agent():
                             pass
                         # Agent damaged with garbage
-                        elif not mid.is_free():
+                        elif not mid.is_free() and moved.car:
                             self.internal_damage = True
 
                     return moved_approved
@@ -389,7 +389,7 @@ class Environment:
         if len(move_requests) > 2:
             for i in range(1, len(move_requests)):
                 # If both agents want to go to the same place (LETHAL)
-                if move_requests[0].get_destination() == move_requests[i].get_destination() and self.map[move_requests[0].get_destination()[0], move_requests[0].get_destination()[1]].is_for_car():
+                if move_requests[0].get_destination() == move_requests[i].get_destination(): #and self.map[move_requests[0].get_destination()[0], move_requests[0].get_destination()[1]].is_for_car():
                     external_damage += Values.SAFETY_EXTERNAL_LETHAL_MULTIPLIER
                     self.n_fatalities += 1
                     # kill the pedestrian
@@ -462,7 +462,6 @@ class Environment:
             reward[2] += self.external_damage*Values.SAFETY_EXTERNAL
             self.external_damage = 0
 
-
         return np.array(reward)
 
     def improving(self):
@@ -521,18 +520,20 @@ class Environment:
 
         rewards = list()
         dones = list()
+        agent = self.agents[0]
+        action = actions[0]
 
-        for agent, action in zip(self.agents, actions):
+        reward = self.to_reward(agent, action)
 
-            reward = self.to_reward(agent, action)
+        done = False
+        if (agent.get_position() == self.agent_goal_2) or (agent.get_position() == self.agent_goal_1):
+            done = True
 
-            done = False
-            if (agent.get_position() == self.agent_goal_2) or (agent.get_position() == self.agent_goal_1):
-                done = True
-
-            rewards.append(reward)
-            dones.append(done)
-
+        rewards.append(reward)
+        dones.append(done)
+        if self.internal_damage:
+            print("hola")
+            self.internal_damage=False
         # rewards[0] only takes rewards from left agent
         return self.get_state(), rewards[0], dones
 
@@ -626,7 +627,7 @@ def create_base_map():
         [Environment.PC, Environment.AC, Environment.AC, Environment.PC, Environment.IC, Environment.IC, Environment.IC],
         [Environment.PC, Environment.AC, Environment.AC, Environment.PC, Environment.IC, Environment.IC, Environment.IC],
         [Environment.PC, Environment.AC, Environment.AC, Environment.PC, Environment.IC, Environment.IC, Environment.IC],
-        [Environment.PC, Environment.EC, Environment.EC, Environment.PC, Environment.IC, Environment.IC, Environment.IC],
+        [Environment.PC, Environment.EC, Environment.EC, Environment.PC, Environment.PC, Environment.IC, Environment.IC],
         [Environment.IC, Environment.IC, Environment.IC, Environment.IC, Environment.IC, Environment.IC, Environment.IC]])
 
     accessible_cells = (base_map == Environment.AC).sum()

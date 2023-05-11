@@ -110,8 +110,7 @@ def deterministic_optimal_policy_calculator(Q, env, weights):
     policy = np.zeros(Q.shape[:-2])
     V = np.zeros(Q.shape[:-2] + (Q.shape[4],))  # this should work in theory, all cells + objectives
 
-    for cell_car in range(
-            env.map_num_cells):  # es podria acotar nombre de cel·les al nombre de cel·les a les que poden accedir??
+    for cell_car in range(env.map_num_cells):  # es podria acotar nombre de cel·les al nombre de cel·les a les que poden accedir??
         for cell_pedestrian_1 in range(env.map_num_cells):
             for cell_pedestrian_2 in range(env.map_num_cells):
                 # One step lookahead to find the best action for this state
@@ -144,6 +143,9 @@ def choose_action(env, state, eps, q_table, weights):
 
 def update_q_table(q_table, env, weights, alpha, gamma, action, state, new_state, reward):
     best_action = np.argmax(scalarised_Qs(env, q_table[new_state[0], new_state[1], new_state[2]], weights))
+
+    '''if state[0]==43 and state[1]==38 and state[2]==31 and action==0:
+        print(reward)'''
 
     for objective in range(len(reward)):
         q_table[state[0], state[1], state[2], action, objective] += alpha * (
@@ -186,11 +188,12 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     vepsilon = []
     verror0 = []
     verror1 = []
-    verror2 = []#'''
+    verror2 = []# '''
 
     # current_alpha = 0.5
     current_eps = 0.3
     #reward = [0, 0, 0]
+    actions = list()
 
     for episode in range(1, max_episodes + 1):
         done = False
@@ -203,13 +206,33 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
         if episode % 1000 == 0:
             print("Episode : ", episode)
             print(Q[43, env.translate(env.initial_pedestrian_2_position), env.translate(env.initial_pedestrian_1_position)])
+            print(np.argmax(scalarised_Qs(env, Q[43, 38, 31], weights)))
         # print(Q[43, 45, 31])
         # print(infoQ[43, 45, 31])
             valpha.append(alpha)
             vepsilon.append(current_eps)
             verror0.append(Q[43, 38, 31][0][0])
             verror1.append(Q[43, 38, 31][0][1])
-            verror2.append(Q[43, 38, 31][0][2])#'''
+            verror2.append(Q[43, 38, 31][0][2])# '''
+            # print("Posició a dins el pas de peatons")
+            # print(Q[23, 53, 10])
+            # print("posició abans del primer bump")
+            # print(Q[36, 31, 24])
+            print("posició un a la dreta, 38")
+            print(Q[44, 38, 24])
+            print(infoQ[44, 38, 24])
+            print(np.argmax(scalarised_Qs(env, Q[44, 38, 24], weights)))
+            print("posició un a la dreta, 31")
+            print(Q[44, 31, 24])
+            print(infoQ[44, 31, 24])
+            print(np.argmax(scalarised_Qs(env, Q[44, 31, 24], weights)))
+            print("posició un a la dreta, 38 - 23")
+            print(Q[37, 38, 23])
+            print(infoQ[37, 38, 23])
+            print(np.argmax(scalarised_Qs(env, Q[37, 38, 23], weights)))
+
+        #[23 53 10]
+        #[36 31 24]
 
         step_count = 0
 
@@ -239,6 +262,10 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
             new_state, reward, dones = env.step(actions)  # we take the actions
 
+            if step_count==1 and actions[0] ==0 and reward[1]==-10:
+                print("Nova cosa:")
+                print(state)
+                print(new_state)
             # R_big[0] += reward[0]*(gamma**(step_count-1))
             # R_big[1] += reward[1]*(gamma**(step_count-1))
 
@@ -279,8 +306,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     plt.subplot(3, 1, 3)
     plt.plot(np.arange(len(verror2)), verror2, label="2")
     plt.legend()
-    plt.show()#'''
-
+    plt.show()# '''
 
     # np_graphics = np.array(for_graphics)
     # np.save('example.npy', np_graphics)
@@ -361,7 +387,7 @@ def main():
 
     # Parameters to change in each run
     alpha = 0.8
-    weights = [1.0, 0.281241, 0.124964]
+    weights = [1.0, 0.21282666666666666, 0.0005333333333333116]
     lexicographic_order = "102"
     initial_pedestrian_1_cell = 31
     initial_pedestrian_2_cell = 38

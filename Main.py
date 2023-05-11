@@ -96,7 +96,7 @@ if __name__ == "__main__":
 
     epsilon = 0.0624
     lex_ordering = [1, 0, 2] # order the correct values!! [1,2,0]
-    initial_states = [[43, 38, 31]]
+    initial_states = [[43, initial_pedestrian_2_cell, 31]]
     # Sembla que: 0: individual, 1: internal, 2: external!!
     discount_factor = 1.0
     max_iterations = 15

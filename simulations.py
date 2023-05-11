@@ -12,7 +12,7 @@ def example_execution(env, policy, render=False, stop=False):
     :return:
     """
     max_timesteps = 200
-    number_of_simulations = 1000
+    number_of_simulations = 10
 
     n_steps = 0
     n_peatons_run = 0
@@ -95,4 +95,4 @@ if __name__ == "__main__":
     print("-----------------------------------")
     print("Starting simulations!")
     print("-----------------------------------")
-    QLearner(env, policy, drawing=False)
+    QLearner(env, policy, drawing=True)
