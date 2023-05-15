@@ -12,11 +12,12 @@ def example_execution(env, policy, render=False, stop=False):
     :return:
     """
     max_timesteps = 200
-    number_of_simulations = 10
+    number_of_simulations = 4000
 
     n_steps = 0
     n_peatons_run = 0
     n_bumps_coll = 0
+    prev_state = []
 
     for i in range(number_of_simulations):
         # Initialize environment
@@ -53,7 +54,7 @@ def example_execution(env, policy, render=False, stop=False):
                 #print(rewards[2])
             if rewards[1] != 0.0: n_bumps_coll += 1
             #print(rewards)
-
+            prev_state = state
             done = dones[0]  # R Agent does not interfere
 
             if render:
@@ -84,7 +85,7 @@ class QLearner:
 
 if __name__ == "__main__":
 
-    policy = np.load('new_38_31/policy_lex102.npy')
+    policy = np.load('new_38_31/policy_lex210.npy')
 
     initial_pedestrian_1_cell = 31
     initial_pedestrian_2_cell = 38
@@ -95,4 +96,4 @@ if __name__ == "__main__":
     print("-----------------------------------")
     print("Starting simulations!")
     print("-----------------------------------")
-    QLearner(env, policy, drawing=True)
+    QLearner(env, policy, drawing=False)

@@ -217,6 +217,9 @@ class Environment:
         self.items = self.generate_items(mode)
         self.agents = self.generate_agents(where_left, where_right, where_ped2)
 
+        self.internal_damage = False
+        self.external_damage = 0
+
     def easy_reset(self, where_left=[6, 1], where_right = [4, 3], where_p2 = [6, 3]):
 
         move = self.agents[0].move_request(0, i_insist=where_left)
@@ -228,6 +231,8 @@ class Environment:
         move = self.agents[2].move_request(0, i_insist=where_p2)
         hum3 = self.do_move_or_not(move)
 
+        self.internal_damage = False
+        self.external_damage = 0
 
     def hard_reset(self, where_left=[6, 1], where_p1 = [4, 3], where_p2 = [6, 3]):
         """

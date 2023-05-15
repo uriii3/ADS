@@ -29,7 +29,7 @@ def plotting(environment, policies_to_compare, initial_state):
     n_policies = len(policies_to_compare) # number of policies we will take intp account
     unethical = False
     vpolicies = []
-    n_unethical_policies = 2
+    n_unethical_policies = 1
 
     root = './' + initial_state + '/'
     # We save all policies we will compare inside the vector:
@@ -48,13 +48,14 @@ def plotting(environment, policies_to_compare, initial_state):
     n_peatons_run = np.zeros(n_policies, dtype=object)
     n_dangerous_driving = np.zeros(n_policies, dtype=object)
     n_bumps_coll = np.zeros(n_policies, dtype=object)
-    v_steps = np.zeros((n_policies, 20))
+    v_steps = np.zeros((n_policies, 12))
     v_peatons_run = np.zeros((n_policies, 4))
     v_dangerous_driving = np.zeros((n_policies, 4))
     v_bumps_coll = np.zeros((n_policies, 5))
 
     for i in range(n_policies):
         policy = vpolicies[i]
+        print(i)
         for j in range(number_of_simulations):
             if unethical and i==n_policies-1: # we are on the unethical simulation
                 if j%(number_of_simulations/n_unethical_policies) == 0:
@@ -68,7 +69,7 @@ def plotting(environment, policies_to_compare, initial_state):
             int_peatons_run = 0
             int_dangerous_driving = 0
             int_bumps_coll = 0
-            environment.hard_reset(env.initial_agent_left_position, env.initial_pedestrian_1_position, env.initial_pedestrian_2_position)
+            environment.hard_reset(environment.initial_agent_left_position, environment.initial_pedestrian_1_position, environment.initial_pedestrian_2_position)
             state = environment.get_state()
             done = False
 
@@ -155,22 +156,24 @@ def plotting(environment, policies_to_compare, initial_state):
 
 
 def main():
-    initial_state = "more_stochasticity" # Policies_38_31 or more_stochasticity
 
     policies_to_compare = [
         "210",
         "120",
         "102",
-        #"201",
-        #"012",
-        #"021",
-        #"unethical"
+        "201",
+        "012",
+        "021",
+        "unethical"
     ]
 
     # Initialize the environment:
-    env = Environment(is_deterministic=True) # he d'anar amb compte amb això!!
-    env.initial_pedestrian_1_position = env.translate_state_cell(31)
-    env.initial_pedestrian_2_position = env.translate_state_cell(45)
+    initial_state = "new_38_31" # new_45_31, new_38_31 or more_sto
+    initial_pedestrian_1_cell = 31
+    initial_pedestrian_2_cell = 38
+    isMoreStochastic = False  # remember to change the file you are grabbing from Main.py!!
+    env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
+                      initial_pedestrian_2_cell=initial_pedestrian_2_cell)
     print()
     print("-----------------------------------")
     print("Starting simulations!")

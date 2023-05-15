@@ -63,7 +63,7 @@ def Ethical_Environment_Designer(env, l_ordering, epsilon, discount_factor=1.0, 
     """
 
     try:
-        with open(r"v_function.pickle", "rb") as input_file:
+        with open(r"v_sto_function.pickle", "rb") as input_file:
             hull = pickle.load(input_file)
     except:
         hull = partial_convex_hull_value_iteration(env, discount_factor, max_iterations)

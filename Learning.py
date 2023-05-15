@@ -211,25 +211,9 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
         # print(infoQ[43, 45, 31])
             valpha.append(alpha)
             vepsilon.append(current_eps)
-            verror0.append(Q[43, 38, 31][0][0])
-            verror1.append(Q[43, 38, 31][0][1])
-            verror2.append(Q[43, 38, 31][0][2])# '''
-            # print("Posició a dins el pas de peatons")
-            # print(Q[23, 53, 10])
-            # print("posició abans del primer bump")
-            # print(Q[36, 31, 24])
-            print("posició un a la dreta, 38")
-            print(Q[44, 38, 24])
-            print(infoQ[44, 38, 24])
-            print(np.argmax(scalarised_Qs(env, Q[44, 38, 24], weights)))
-            print("posició un a la dreta, 31")
-            print(Q[44, 31, 24])
-            print(infoQ[44, 31, 24])
-            print(np.argmax(scalarised_Qs(env, Q[44, 31, 24], weights)))
-            print("posició un a la dreta, 38 - 23")
-            print(Q[37, 38, 23])
-            print(infoQ[37, 38, 23])
-            print(np.argmax(scalarised_Qs(env, Q[37, 38, 23], weights)))
+            verror0.append(Q[43, 45, 31][0][0])
+            verror1.append(Q[43, 45, 31][0][1])
+            verror2.append(Q[43, 45, 31][0][2])# '''
 
         #[23 53 10]
         #[36 31 24]
@@ -387,8 +371,8 @@ def main():
 
     # Parameters to change in each run
     alpha = 0.8
-    weights = [1.0, 0.21282666666666666, 0.0005333333333333116]
-    lexicographic_order = "102"
+    weights = [1.0, 1.26, 7.9]
+    lexicographic_order = "120"
     initial_pedestrian_1_cell = 31
     initial_pedestrian_2_cell = 38
     isMoreStochastic = False
@@ -403,7 +387,7 @@ def main():
     print("The Learnt Policy has the following Value for alpha = ", alpha, " is:")
 
     if save:
-        np.save("./new_38_31/policy_lex" + lexicographic_order + ".npy", policy)  # changepo
+        np.save("./new_" + str(initial_pedestrian_2_cell) + "_31/policy_lex" + lexicographic_order + ".npy", policy)  # changepo
 
     print("-------------------")
     print("Finnished!!!")
