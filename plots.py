@@ -23,13 +23,13 @@ def plotting(environment, policies_to_compare, initial_state):
     """
     #Variables to set:
     max_timesteps = 200
-    number_of_simulations = 250
+    number_of_simulations = 300
 
     # Variables taken into account quickly derived
     n_policies = len(policies_to_compare) # number of policies we will take intp account
     unethical = False
     vpolicies = []
-    n_unethical_policies = 1
+    n_unethical_policies = 3
 
     root = './' + initial_state + '/'
     # We save all policies we will compare inside the vector:
@@ -48,7 +48,7 @@ def plotting(environment, policies_to_compare, initial_state):
     n_peatons_run = np.zeros(n_policies, dtype=object)
     n_dangerous_driving = np.zeros(n_policies, dtype=object)
     n_bumps_coll = np.zeros(n_policies, dtype=object)
-    v_steps = np.zeros((n_policies, 12))
+    v_steps = np.zeros((n_policies, 20))
     v_peatons_run = np.zeros((n_policies, 4))
     v_dangerous_driving = np.zeros((n_policies, 4))
     v_bumps_coll = np.zeros((n_policies, 5))
@@ -58,6 +58,8 @@ def plotting(environment, policies_to_compare, initial_state):
         print(i)
         for j in range(number_of_simulations):
             if unethical and i==n_policies-1: # we are on the unethical simulation
+                #print(number_of_simulations/n_unethical_policies)
+                #print(j%(number_of_simulations/n_unethical_policies))
                 if j%(number_of_simulations/n_unethical_policies) == 0:
                     print(j)
                     print(number_of_simulations)
@@ -107,8 +109,10 @@ def plotting(environment, policies_to_compare, initial_state):
     space = 1.5
     width = 1/(n_policies+space)
     center = (n_policies-1)/2
-    CB_color_cycle = ['#377eb8', '#ff7f00', '#4daf4a', '#f781bf', '#a65628', '#984ea3', '#999999', '#e41a1c', '#dede00'] # in theory colorblind friendly :)
-    CB_hatch_cycle = ['/', 'o', 'x', '..', '*', '', '/', 'o', 'x']
+    #'#377eb8', '#ff7f00', '#4daf4a',
+    CB_color_cycle = ['#f781bf', '#a65628', '#984ea3', '#999999', '#e41a1c', '#dede00'] # in theory colorblind friendly :)
+    # '/', 'o', 'x',
+    CB_hatch_cycle = [ '..', '*', '', '/', 'o', 'x']
     plt.figure()
     for i in range(n_policies):
         plt.subplot(4, 1, 1)
@@ -132,16 +136,16 @@ def plotting(environment, policies_to_compare, initial_state):
     for xx in np.arange(len(v_steps[0])):
         plt.axvline(x=xx+0.5, linestyle='--', alpha = 0.3, color='red', lw=0.5)
     plt.subplot(4, 1, 2)
-    plt.title("Runned peatons in one go", y=1.0, pad=-14)
+    plt.title("Overrun pedestrians", y=1.0, pad=-14)
     for xx in np.arange(len(v_peatons_run[0])):
         plt.axvline(x=xx+0.5, linestyle='--', alpha = 0.3, color='red', lw=0.5)
     plt.subplot(4, 1, 3)
-    plt.title("Dangerous driving situations in one go", y=1.0, pad=-14)
+    plt.title("Dangerous driving situations", y=1.0, pad=-14)
     plt.legend(loc='center right', bbox_to_anchor=(1.1, 0.8), fancybox=True, shadow=True)
     for xx in np.arange(len(v_dangerous_driving[0])):
         plt.axvline(x=xx + 0.5, linestyle='--', alpha=0.3, color='red', lw=0.5)
     plt.subplot(4, 1, 4)
-    plt.title("Bumps taken in one go", y=1.0, pad=-14)
+    plt.title("Bumps taken", y=1.0, pad=-14)
     for xx in np.arange(len(v_bumps_coll[0])):
         plt.axvline(x=xx+0.5, linestyle='--', alpha = 0.3, color='red', lw=0.5)
 
@@ -157,21 +161,22 @@ def plotting(environment, policies_to_compare, initial_state):
 
 def main():
 
+    #'''
     policies_to_compare = [
-        "210",
-        "120",
-        "102",
+        #"210",
+        #"120",
+        #"102",
         "201",
         "012",
         "021",
         "unethical"
-    ]
+    ]#'''
 
     # Initialize the environment:
-    initial_state = "new_38_31" # new_45_31, new_38_31 or more_sto
+    initial_state = "new_more_sto" # new_45_31, new_38_31 or more_sto
     initial_pedestrian_1_cell = 31
-    initial_pedestrian_2_cell = 38
-    isMoreStochastic = False  # remember to change the file you are grabbing from Main.py!!
+    initial_pedestrian_2_cell = 45
+    isMoreStochastic = True  # remember to change the file you are grabbing from Main.py!!
     env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
                       initial_pedestrian_2_cell=initial_pedestrian_2_cell)
     print()

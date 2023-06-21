@@ -284,13 +284,13 @@ def example_execution(policy, q, initial_pedestrian_1_cell, initial_pedestrian_2
 
 if __name__ == "__main__":
     initial_pedestrian_1_cell = 31
-    initial_pedestrian_2_cell = 38
-    isMoreStochastic = False
+    initial_pedestrian_2_cell = 45
+    isMoreStochastic = True
     env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
                       initial_pedestrian_2_cell=initial_pedestrian_2_cell)
 
     w_E = 0.0
-    weights = [1.0, 0.21282666666666666, 0.0005333333333333486]
+    weights = [1.0, 0.0032263374485599463, 1.2381344307270263]
     print("TO DO: No hace falta que todos los estados sean diferentes para los dos peatones. Si los cambias de sitio al final es lo mismo.")
     print("Y tambien ayudaria en temas de velocidad tener un model.npy")
 
@@ -311,7 +311,7 @@ if __name__ == "__main__":
     print("-------------------")
 
     car = 43
-    person = 38
+    person = 45
     person2 = 31
     print(v[car][person][person2])
 
@@ -322,12 +322,3 @@ if __name__ == "__main__":
     example_execution(policy, q, initial_pedestrian_1_cell, initial_pedestrian_2_cell, isMoreStochastic)
 
     print("-------------------")
-    example_execution(policy, q, initial_pedestrian_1_cell, initial_pedestrian_2_cell, isMoreStochastic)
-
-    print("-------------------")
-    example_execution(policy, q, initial_pedestrian_1_cell, initial_pedestrian_2_cell, isMoreStochastic)
-
-    print("-------------------")
-
-
-

@@ -89,13 +89,13 @@ if __name__ == "__main__":
     from ADS_Environment import Environment
 
     initial_pedestrian_1_cell = 31
-    initial_pedestrian_2_cell = 38
-    isMoreStochastic = False
+    initial_pedestrian_2_cell = 45
+    isMoreStochastic = True
     env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
                       initial_pedestrian_2_cell=initial_pedestrian_2_cell)
 
-    epsilon = 0.0624
-    lex_ordering = [1, 0, 2] # order the correct values!! [1,2,0]
+    epsilon = 0.1
+    lex_ordering = [2, 0, 1] # order the correct values!! [1,2,0]
     initial_states = [[43, initial_pedestrian_2_cell, 31]]
     # Sembla que: 0: individual, 1: internal, 2: external!!
     discount_factor = 1.0

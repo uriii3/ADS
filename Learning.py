@@ -183,7 +183,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     # eps_reduc = epsilon / max_episodes  # per trobar les accions (exploration vs exploitation)
     infoQ = np.zeros([n_cells, n_cells, n_cells])
     # alpha_reduc = 0.5 * alpha / max_episodes  # pel pas de cada correcció
-    #'''
+    '''
     valpha = []
     vepsilon = []
     verror0 = []
@@ -202,11 +202,11 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
         state = env.get_state()
 
-        #'''
+        '''
         if episode % 1000 == 0:
             print("Episode : ", episode)
             print(Q[43, env.translate(env.initial_pedestrian_2_position), env.translate(env.initial_pedestrian_1_position)])
-            print(np.argmax(scalarised_Qs(env, Q[43, 38, 31], weights)))
+            print(np.argmax(scalarised_Qs(env, Q[43, 45, 31], weights)))
         # print(Q[43, 45, 31])
         # print(infoQ[43, 45, 31])
             valpha.append(alpha)
@@ -233,13 +233,13 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
 
             #current_max = 0.1
 
-            if episode > 40000:
+            if episode > 80000:
                 alpha = 0.4
-            if episode > 60000:# 2
+            if episode > 120000:# 2
                 alpha = 0.2
-            if episode > 70000:# 3
+            if episode > 140000:# 3
                 alpha = 0.1
-            if episode > 80000:# 4
+            if episode > 160000:# 4
                 alpha = 0.05
 
             # current_alpha = max(current_max, alpha - (0.0001 * infoQ[state[0]][state[1]][state[2]]))
@@ -271,7 +271,7 @@ def q_learning(env, weights, alpha=0.98, gamma=1.0, max_weights=5000, max_episod
     policy, V = deterministic_optimal_policy_calculator(Q, env, weights)
 
     # Plot the information gathered:
-    #'''
+    '''
     plt.figure(1)
     plt.subplot(2, 1, 1)
     plt.plot(np.arange(len(valpha)), valpha, label="Alpha")
@@ -371,11 +371,11 @@ def main():
 
     # Parameters to change in each run
     alpha = 0.8
-    weights = [1.0, 1.26, 7.9]
-    lexicographic_order = "120"
+    weights = [1.0, 0.0, 0.0]
+    lexicographic_order = "unethical2"
     initial_pedestrian_1_cell = 31
-    initial_pedestrian_2_cell = 38
-    isMoreStochastic = False
+    initial_pedestrian_2_cell = 45
+    isMoreStochastic = True
     env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
                       initial_pedestrian_2_cell=initial_pedestrian_2_cell)
     max_episodes = 90000
@@ -387,7 +387,7 @@ def main():
     print("The Learnt Policy has the following Value for alpha = ", alpha, " is:")
 
     if save:
-        np.save("./new_" + str(initial_pedestrian_2_cell) + "_31/policy_lex" + lexicographic_order + ".npy", policy)  # changepo
+        np.save("./new_more_sto/policy_lex" + lexicographic_order + ".npy", policy)  # changepo
 
     print("-------------------")
     print("Finnished!!!")
