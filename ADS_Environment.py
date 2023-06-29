@@ -416,15 +416,18 @@ class Environment:
                         external_damage += Values.SAFETY_EXTERNAL_INJURY_MULTIPLIER
                         self.n_injuries += 1
 
+        car_aprovat = False
         ##### Order checking finished here
         for i in range(len(move_requests)):
             move_request = move_requests[i]
             move_approved = self.do_move_or_not(move_request)
             if move_approved and i == 0:
+                car_aprovat = move_approved
                 self.external_damage = external_damage
 
-        for j in range(len(kill)):
-            self.to_ran_over(kill[j][1], kill[j][2])
+        if car_aprovat: # i added this line just for the proper use of simulations, can be deleted
+            for j in range(len(kill)):
+                self.to_ran_over(kill[j][1], kill[j][2])
 
     def remove_from_cell(self, pos, item):
         self.map[pos[0], pos[1]].remove(item)
@@ -537,7 +540,6 @@ class Environment:
         rewards.append(reward)
         dones.append(done)
         if self.internal_damage:
-            print("hola")
             self.internal_damage=False
         # rewards[0] only takes rewards from left agent
         return self.get_state(), rewards[0], dones
