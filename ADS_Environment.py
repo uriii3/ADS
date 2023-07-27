@@ -473,7 +473,7 @@ class Environment:
         return np.array(reward)
 
     def improving(self):
-        pos = self.items[0].get_position()[1] ## to check if the garbage is in the wastebasket, which can only have y=1 or 3
+        pos = self.items[0].get_position()[1]
 
         if pos == 3:
             pos = 1

@@ -29,7 +29,7 @@ def plotting(environment, policies_to_compare, initial_state):
     n_policies = len(policies_to_compare) # number of policies we will take intp account
     unethical = False
     vpolicies = []
-    n_unethical_policies = 3
+    n_unethical_policies = 1
 
     root = './' + initial_state + '/'
     # We save all policies we will compare inside the vector:
@@ -109,10 +109,10 @@ def plotting(environment, policies_to_compare, initial_state):
     space = 1.5
     width = 1/(n_policies+space)
     center = (n_policies-1)/2
-    #'#377eb8', '#ff7f00', '#4daf4a',
-    CB_color_cycle = ['#f781bf', '#a65628', '#984ea3', '#999999', '#e41a1c', '#dede00'] # in theory colorblind friendly :)
-    # '/', 'o', 'x',
-    CB_hatch_cycle = [ '..', '*', '', '/', 'o', 'x']
+    #
+    CB_color_cycle = ['#377eb8', '#ff7f00', '#4daf4a', '#f781bf', '#a65628', '#984ea3', '#999999', '#e41a1c', '#dede00'] # in theory colorblind friendly :)
+    #
+    CB_hatch_cycle = ['/', 'o', 'x', '..', '*', '', '/', 'o', 'x']
     plt.figure()
     for i in range(n_policies):
         plt.subplot(4, 1, 1)
@@ -163,9 +163,9 @@ def main():
 
     #'''
     policies_to_compare = [
-        #"210",
-        #"120",
-        #"102",
+        "210",
+        "120",
+        "102",
         "201",
         "012",
         "021",
@@ -173,10 +173,10 @@ def main():
     ]#'''
 
     # Initialize the environment:
-    initial_state = "new_more_sto" # new_45_31, new_38_31 or more_sto
+    initial_state = "new_38_31" # new_45_31, new_38_31 or more_sto
     initial_pedestrian_1_cell = 31
-    initial_pedestrian_2_cell = 45
-    isMoreStochastic = True  # remember to change the file you are grabbing from Main.py!!
+    initial_pedestrian_2_cell = 38
+    isMoreStochastic = False  # remember to change the file you are grabbing from Main.py!!
     env = Environment(isMoreStochastic=isMoreStochastic, initial_pedestrian_1_cell=initial_pedestrian_1_cell,
                       initial_pedestrian_2_cell=initial_pedestrian_2_cell)
     print()

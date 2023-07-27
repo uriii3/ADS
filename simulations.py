@@ -14,7 +14,7 @@ def example_execution(env, policy, render=False, save = False, stop=False):
     :return:
     """
     max_timesteps = 200
-    number_of_simulations = 10
+    number_of_simulations = 5
 
     n_steps = 0
     n_peatons_run = 0
@@ -45,7 +45,6 @@ def example_execution(env, policy, render=False, save = False, stop=False):
         history_rewards = list()
         history_state = list()
 
-        time.sleep(1.5)
         while (timesteps < max_timesteps) and (not done):
             timesteps += 1
             v = []
@@ -94,7 +93,7 @@ def example_execution(env, policy, render=False, save = False, stop=False):
 
             if render:
                 if not env.drawing_paused():
-                    time.sleep(0.5)
+                    time.sleep(1.5)
                     env.update_window()
 
         n_steps += timesteps
@@ -132,7 +131,7 @@ class QLearner:
 
 if __name__ == "__main__":
 
-    policy = np.load('new_more_sto/policy_lex201.npy')
+    policy = np.load('new_more_sto/policy_lex210.npy')
 
     initial_pedestrian_1_cell = 31
     initial_pedestrian_2_cell = 45
