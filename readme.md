@@ -1,6 +1,6 @@
 # Welcome to the ADS - Environment Repository!
 
-In this repository you can find all the codes and information to do everything explained in this [ overleaf document](https://www.overleaf.com/read/swkhjmdypdrh).
+In this repository you can find all the codes and information to do to run the Autonomous Car environment.
 
 There are several groups of documents in this repository: information, main codes and assisting codes. And the main codes are divided into the ones useful to find the weights, the ones to do reinforcement learning and the ones to analyse the results.
 
